@@ -53,7 +53,7 @@ Trin-and-Basti-Adventures/
     │   ├── page.tsx        # Home page entry point
     │   └── globals.css     # Global Tailwind styles
     └── components/
-        ├── AnniversaryPage.tsx  # Main page component with photo data
+        ├── AdventuresPage.tsx   # Main page component with photo data
         ├── Header.tsx           # Site header with relationship timer
         ├── FeaturedMemory.tsx   # Featured photo display with location
         ├── PhotoGrid.tsx        # Photo grid with category filtering
@@ -68,18 +68,18 @@ This project is configured for deployment on Vercel:
 
 1. Connect your repository to Vercel
 2. Deploy automatically on every push to main
-3. Enjoy your beautiful anniversary site!
+3. Enjoy your beautiful photo album!
 
 ## Adding New Photos
 
 1. Add your image files to the `public/images/` directory
 2. Use the "+" button on the site to add new memories
-3. Or edit the `initialPhotos` array in `AnniversaryPage.tsx`
+3. Or edit the `initialPhotos` array in `AdventuresPage.tsx`
 
 ## Customization
 
 - Edit the header message in `Header.tsx`
-- Modify the featured photo in `AnniversaryPage.tsx`
+- Modify the featured photo in `AdventuresPage.tsx`
 - Add new categories in `PhotoGrid.tsx`
 - Customize colors and styling in the component files
 

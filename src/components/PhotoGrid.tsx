@@ -1,6 +1,6 @@
 import React from 'react'
 import PhotoCard from './PhotoCard'
-import { Photo } from './AnniversaryPage'
+import { Photo } from './AdventuresPage'
 
 interface PhotoGridProps {
   photos: Photo[]

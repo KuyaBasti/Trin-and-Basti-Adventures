@@ -19,7 +19,7 @@ export interface Photo {
   category: 'travels' | 'date-nights' | 'adventures' | 'special-days'
 }
 
-export default function AnniversaryPage() {
+export default function AdventuresPage() {
   const [activeCategory, setActiveCategory] = useState('all')
   const [isModalOpen, setIsModalOpen] = useState(false)
   

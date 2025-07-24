@@ -1,5 +1,5 @@
-import AnniversaryPage from '@/components/AnniversaryPage'
+import AdventuresPage from '@/components/AdventuresPage'
 
 export default function Home() {
-  return <AnniversaryPage />
+  return <AdventuresPage />
 } 

@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import { Photo } from './AnniversaryPage'
+import { Photo } from './AdventuresPage'
 
 interface FeaturedMemoryProps {
   photo: Photo

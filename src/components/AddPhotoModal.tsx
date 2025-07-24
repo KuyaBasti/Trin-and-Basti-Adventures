@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Photo } from './AnniversaryPage'
+import { Photo } from './AdventuresPage'
 
 interface AddPhotoModalProps {
   isOpen: boolean

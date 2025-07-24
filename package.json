@@ -1,5 +1,5 @@
 {
-  "name": "anniversary",
+  "name": "trin-and-basti-adventures",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -28,19 +28,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/KuyaBasti/Anniversary.git"
+    "url": "git+https://github.com/KuyaBasti/Trin-and-Basti-Adventures.git"
   },
   "keywords": [
-    "anniversary",
-    "photo-book",
+    "adventures",
+    "photo-album",
+    "memories",
     "next.js",
     "react"
   ],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/KuyaBasti/Anniversary/issues"
+    "url": "https://github.com/KuyaBasti/Trin-and-Basti-Adventures/issues"
   },
-  "homepage": "https://github.com/KuyaBasti/Anniversary#readme",
-  "description": "A beautiful anniversary photo book celebrating our first year together"
+  "homepage": "https://github.com/KuyaBasti/Trin-and-Basti-Adventures#readme",
+  "description": "A beautiful photo album documenting Trin and Basti's adventures together"
 }
