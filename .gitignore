@@ -78,3 +78,6 @@ jspm_packages/
 
 # Vercel
 .vercel 
+# Local upload storage (dev only; production uses Vercel Blob)
+.data/
+public/uploads/

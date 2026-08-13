@@ -2,7 +2,13 @@
 const nextConfig = {
   images: {
     formats: ['image/webp', 'image/avif'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*.public.blob.vercel-storage.com',
+      },
+    ],
   },
 }
 
-module.exports = nextConfig 
+module.exports = nextConfig

@@ -1,82 +1,99 @@
+'use client'
+
 import React from 'react'
 import Image from 'next/image'
-import { Photo } from './AdventuresPage'
+import { coverOf, mapsUrl, type Memory } from '@/lib/photos'
 
 interface FeaturedMemoryProps {
-  photo: Photo
+  memory: Memory
+  onOpen: (memory: Memory) => void
 }
 
-export default function FeaturedMemory({ photo }: FeaturedMemoryProps) {
+export default function FeaturedMemory({ memory, onOpen }: FeaturedMemoryProps) {
+  const cover = coverOf(memory)
+  const extra = memory.photos.length - 1
+
   return (
-    <div style={{
-      margin: '20px 0 40px 0',
-      backgroundColor: '#fff',
-      borderRadius: '12px',
-      overflow: 'hidden',
-      boxShadow: '0 5px 15px rgba(0,0,0,0.1)'
-    }}>
-      <Image
-        src={photo.src}
-        alt={photo.alt}
-        width={1200}
-        height={500}
+    <div
+      style={{
+        margin: '20px 0 40px 0',
+        backgroundColor: '#fff',
+        borderRadius: '12px',
+        overflow: 'hidden',
+        boxShadow: '0 5px 15px rgba(0,0,0,0.1)',
+      }}
+    >
+      <button
+        onClick={() => onOpen(memory)}
+        aria-label={`Open ${memory.title}`}
         style={{
+          display: 'block',
+          position: 'relative',
           width: '100%',
-          maxHeight: '500px',
-          objectFit: 'cover',
-          backgroundColor: '#eee'
+          height: '500px',
+          padding: 0,
+          border: 'none',
+          background: '#eee',
+          cursor: 'pointer',
         }}
-        priority
-      />
-      
+      >
+        {cover && (
+          <Image
+            src={cover.src}
+            alt={memory.title}
+            fill
+            sizes="(max-width: 1200px) 100vw, 1200px"
+            style={{ objectFit: 'cover' }}
+            priority
+          />
+        )}
+        {extra > 0 && (
+          <span
+            style={{
+              position: 'absolute',
+              right: '14px',
+              bottom: '14px',
+              background: 'rgba(0,0,0,0.6)',
+              color: '#fff',
+              fontSize: '14px',
+              padding: '6px 12px',
+              borderRadius: '999px',
+            }}
+          >
+            +{extra} more
+          </span>
+        )}
+      </button>
+
       <div style={{ padding: '30px' }}>
-        <h2 style={{
-          fontSize: '32px',
-          margin: '0 0 15px 0',
-          color: '#333'
-        }}>
-          {photo.title}
+        <h2 style={{ fontSize: '32px', margin: '0 0 15px 0', color: '#333' }}>
+          {memory.title}
         </h2>
-        
-        <div
-          onClick={() => window.open(`https://maps.google.com/maps?q=${encodeURIComponent(photo.location)}`, '_blank')}
+
+        <a
+          href={mapsUrl(memory)}
+          target="_blank"
+          rel="noopener noreferrer"
           style={{
             fontSize: '16px',
             color: '#888',
             marginBottom: '10px',
-            cursor: 'pointer',
             fontStyle: 'italic',
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
-            transition: 'color 0.2s ease'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color = '#555'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color = '#888'
+            textDecoration: 'none',
           }}
         >
-          📍 {photo.location}
-        </div>
-        
-        <p style={{
-          fontSize: '14px',
-          color: '#777',
-          marginBottom: '15px'
-        }}>
-          {photo.date}
-        </p>
-        
-        <p style={{
-          fontSize: '16px',
-          lineHeight: '1.5',
-          color: '#555'
-        }}>
-          {photo.description}
+          📍 {memory.location}
+        </a>
+
+        <p style={{ fontSize: '14px', color: '#777', marginBottom: '15px' }}>{memory.date}</p>
+
+        <p style={{ fontSize: '16px', lineHeight: '1.5', color: '#555' }}>
+          {memory.description}
         </p>
       </div>
     </div>
   )
-} 
+}
