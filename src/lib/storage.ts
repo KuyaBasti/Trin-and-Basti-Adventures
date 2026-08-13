@@ -109,3 +109,54 @@ function blobDriver(): StorageDriver {
 export function getStorage(): StorageDriver {
   return process.env.BLOB_READ_WRITE_TOKEN ? blobDriver() : localDriver()
 }
+
+/**
+ * Serialized read-modify-write of the manifest. Every writer goes through
+ * here, so two edits in flight on the same instance can't interleave and
+ * erase each other's changes. Cross-instance races remain last-write-wins
+ * (documented, acceptable at two users), but this closes the realistic
+ * paths: sequential imports, a cover change during an import, dev.
+ *
+ * `mutate` returns the next manifest, or null to abort without writing.
+ */
+let manifestChain: Promise<unknown> = Promise.resolve()
+
+export function updateManifest(
+  mutate: (memories: Memory[]) => Memory[] | null,
+): Promise<Memory[] | null> {
+  const run = manifestChain.then(async () => {
+    const storage = getStorage()
+    const memories = await storage.readManifest()
+    const next = mutate(memories)
+    if (next !== null) await storage.writeManifest(next)
+    return next
+  })
+  // The chain must survive a rejected run, or one failure wedges all writes.
+  manifestChain = run.catch(() => undefined)
+  return run
+}
+
+/**
+ * Only images this app itself stored may appear in the album. Without this,
+ * anyone with the password could persist arbitrary external URLs — and the
+ * next/image allowlist (`*.public.blob.vercel-storage.com`) matches every
+ * Vercel Blob customer's store, not just ours.
+ */
+export function isOwnSrc(src: string): boolean {
+  const token = process.env.BLOB_READ_WRITE_TOKEN
+  if (!token) return /^\/uploads\/[A-Za-z0-9._-]+$/.test(src)
+  try {
+    const url = new URL(src)
+    if (url.protocol !== 'https:') return false
+    // Token shape: vercel_blob_rw_<STOREID>_<secret> → store hostname is
+    // <storeid>.public.blob.vercel-storage.com. If the shape ever changes,
+    // fall back to the suffix check rather than locking ourselves out.
+    const match = token.match(/^vercel_blob_rw_([A-Za-z0-9]+)_/)
+    if (match) {
+      return url.hostname === `${match[1].toLowerCase()}.public.blob.vercel-storage.com`
+    }
+    return url.hostname.endsWith('.public.blob.vercel-storage.com')
+  } catch {
+    return false
+  }
+}

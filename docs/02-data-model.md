@@ -75,6 +75,23 @@ else local disk:
 The interface is deliberately three methods so a future storage move
 (Supabase, S3) is one new ~40-line driver, nothing else.
 
+## Editing (`PATCH /api/memories/[id]`)
+
+Two operations, both session-gated: `addPhotos` (same shape as POST's
+`photos`) appends to an existing memory, and `coverId` picks which photo
+fronts the card. Rules enforced server-side:
+
+- Photos already in the memory (matched by stored URL) are skipped, so a
+  retried import cannot duplicate.
+- Appending never re-sorts the existing photos, and the current implicit
+  cover is pinned to an explicit `coverId` first — "add photos" can never
+  silently change what a card shows.
+- Every `src` must pass `isOwnSrc` (this app's own `/uploads/` path in dev or
+  its own Blob store hostname in prod) — external URLs are rejected with 400.
+- All manifest writes (POST and PATCH) run through `updateManifest`, a
+  serialized read-modify-write queue in `storage.ts`; cross-instance races
+  remain last-write-wins as documented above.
+
 ## Auth (`src/lib/auth.ts`)
 
 Not user data — one shared secret. `ALBUM_PASSWORD` (dev fallback `letmein`;

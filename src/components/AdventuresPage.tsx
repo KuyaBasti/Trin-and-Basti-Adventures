@@ -29,8 +29,20 @@ export default function AdventuresPage() {
       .catch(() => setLoadError(true))
   }, [])
 
-  const handleImported = (added: Memory[]) => {
-    setMemories((prev) => byDate([...(prev ?? []), ...added]))
+  // Upsert: an import can return brand-new memories and freshly-updated
+  // existing ones (photos merged in); an edit returns one updated memory.
+  const handleChanged = (changed: Memory[]) => {
+    setMemories((prev) => {
+      let next = prev ?? []
+      for (const memory of changed) {
+        next = next.some((m) => m.id === memory.id)
+          ? next.map((m) => (m.id === memory.id ? memory : m))
+          : [...next, memory]
+      }
+      return byDate(next)
+    })
+    // Keep an open gallery in sync with what it just changed.
+    setViewing((v) => changed.find((m) => m.id === v?.id) ?? v)
   }
 
   const featured = memories?.find((m) => m.id === FEATURED_ID)
@@ -81,6 +93,9 @@ export default function AdventuresPage() {
 
       <Footer />
 
+      {/* Hidden until the album has loaded: importing against unknown album
+          state would skip merge detection and create duplicate days. */}
+      {memories !== null && (
       <button
         onClick={() => setImportOpen(true)}
         aria-label="Add memories"
@@ -104,14 +119,20 @@ export default function AdventuresPage() {
       >
         +
       </button>
+      )}
 
       <ImportModal
         isOpen={isImportOpen}
         onClose={() => setImportOpen(false)}
-        onImported={handleImported}
+        existing={memories ?? []}
+        onImported={handleChanged}
       />
 
-      <Lightbox memory={viewing} onClose={() => setViewing(null)} />
+      <Lightbox
+        memory={viewing}
+        onClose={() => setViewing(null)}
+        onUpdated={(m) => handleChanged([m])}
+      />
     </div>
   )
 }

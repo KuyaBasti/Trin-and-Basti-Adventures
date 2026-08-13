@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto'
 import { NextResponse } from 'next/server'
 import { hasSession } from '@/lib/auth'
-import { getStorage } from '@/lib/storage'
+import { getStorage, isOwnSrc, updateManifest } from '@/lib/storage'
 import {
   byDate,
   formatDate,
@@ -48,6 +48,10 @@ export async function POST(request: Request) {
   } catch {
     return NextResponse.json({ error: 'Invalid request.' }, { status: 400 })
   }
+  // JSON.parse("null") succeeds, so the annotation alone proves nothing.
+  if (typeof body !== 'object' || body === null) {
+    return NextResponse.json({ error: 'Invalid request.' }, { status: 400 })
+  }
 
   const str = (key: string) => (body[key] ?? '').toString().trim()
   const title = str('title')
@@ -67,19 +71,28 @@ export async function POST(request: Request) {
   }
 
   const incoming = Array.isArray(body.photos) ? (body.photos as IncomingPhoto[]) : []
-  const photos: Photo[] = incoming
-    .filter((p) => typeof p.src === 'string' && p.src.length > 0)
-    .map((p) => ({
-      id: randomUUID(),
-      src: p.src as string,
-      takenAt: typeof p.takenAt === 'string' ? p.takenAt : undefined,
-      lat: num(p.lat),
-      lng: num(p.lng),
-    }))
-
-  if (photos.length === 0) {
+  const wellFormed = incoming.filter(
+    (p): p is IncomingPhoto & { src: string } =>
+      p != null && typeof p.src === 'string' && p.src.length > 0,
+  )
+  if (wellFormed.length === 0) {
     return NextResponse.json({ error: 'A memory needs at least one photo.' }, { status: 400 })
   }
+  // Only images this app stored may enter the album — reject, don't drop.
+  if (wellFormed.some((p) => !isOwnSrc(p.src))) {
+    return NextResponse.json(
+      { error: 'Photos must be uploaded through this album first.' },
+      { status: 400 },
+    )
+  }
+
+  const photos: Photo[] = wellFormed.map((p) => ({
+    id: randomUUID(),
+    src: p.src,
+    takenAt: typeof p.takenAt === 'string' ? p.takenAt : undefined,
+    lat: num(p.lat),
+    lng: num(p.lng),
+  }))
 
   const rawCategory = str('category') as PhotoCategory
   const category = VALID_CATEGORIES.includes(rawCategory) ? rawCategory : 'adventures'
@@ -100,9 +113,7 @@ export async function POST(request: Request) {
     photos,
   }
 
-  const storage = getStorage()
-  const memories = await storage.readManifest()
-  await storage.writeManifest([...memories, memory])
+  await updateManifest((memories) => [...memories, memory])
 
   return NextResponse.json({ memory }, { status: 201 })
 }
