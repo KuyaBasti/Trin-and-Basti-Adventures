@@ -3,6 +3,16 @@
 Living record of what's shipped. Newest first — one dated entry per commit or
 coherent chunk of work. Keep it honest: unverified is unverified.
 
+## 2026-08-13 — deploy blocked by Vercel, Next upgraded 15.3.5 → 15.5.23
+
+Every production deploy since the merge errored *after* a successful build:
+Vercel hard-blocks deploying Next.js versions with known CVEs, and 15.3.5 is a
+year old ("Vulnerable version of Next.js detected"). Production kept serving
+the 385-day-old static build, which is why the API 404'd. Upgrade to 15.5.23;
+typecheck, build, and a dev-server smoke test (11 memories, 200s) all clean.
+Lesson recorded: a Vercel deploy can fail *after* "Build Completed" — check
+`vercel inspect --logs` for the post-build verdict, not just the build output.
+
 ## Where things stand
 
 - **Stage 2 complete, locally verified.** Bulk import with EXIF day-grouping,
