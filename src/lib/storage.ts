@@ -32,8 +32,13 @@ function localDriver(): StorageDriver {
         )
         return JSON.parse(raw) as Memory[]
       } catch {
-        // First run: lay down the memories that used to be hardcoded.
-        await this.writeManifest(SEED_MEMORIES)
+        // First run: lay down the memories that used to be hardcoded. If even
+        // that write fails (a production deploy before the Blob store exists
+        // runs this driver on a read-only filesystem), still serve the seeds —
+        // a read-only album beats a 500.
+        try {
+          await this.writeManifest(SEED_MEMORIES)
+        } catch {}
         return SEED_MEMORIES
       }
     },

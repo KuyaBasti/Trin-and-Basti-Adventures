@@ -30,7 +30,10 @@ coherent chunk of work. Keep it honest: unverified is unverified.
 ## 2026-08-13 — Stage 3 begins: first PR opened
 
 Everything from 2026-08-10 onward — Stages 1–2 plus the doc set — goes up as
-one PR to `main`. Adopted the feature-branch → PR workflow from the other
+one PR to `main`. Pre-merge hardening: a production deploy *before* the Blob
+store exists lands on the local-disk driver over a read-only filesystem, which
+would have 500'd the album; the seed write now fails soft and serves the 11
+seed memories read-only (verified locally against a chmod-555 `.data/`). Adopted the feature-branch → PR workflow from the other
 projects (CLAUDE.md updated). Fixed the remote: origin now points at the
 renamed `KuyaBasti/Trin-and-Basti-Adventures`. Remaining for Stage 3 after
 merge: Blob store + `ALBUM_PASSWORD` in the Vercel dashboard, then a
