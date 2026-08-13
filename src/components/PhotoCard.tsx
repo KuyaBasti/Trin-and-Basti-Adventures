@@ -1,89 +1,97 @@
+'use client'
+
 import React from 'react'
 import Image from 'next/image'
-import { Photo } from './AdventuresPage'
+import { coverOf, mapsUrl, type Memory } from '@/lib/photos'
 
 interface PhotoCardProps {
-  photo: Photo
+  memory: Memory
+  onOpen: (memory: Memory) => void
 }
 
-export default function PhotoCard({ photo }: PhotoCardProps) {
+export default function PhotoCard({ memory, onOpen }: PhotoCardProps) {
+  const cover = coverOf(memory)
+  const extra = memory.photos.length - 1
+
   return (
-    <div style={{
-      backgroundColor: '#fff',
-      borderRadius: '8px',
-      overflow: 'hidden',
-      boxShadow: '0 3px 10px rgba(0,0,0,0.1)',
-      transition: 'transform 0.3s ease'
-    }}
-    onMouseEnter={(e) => {
-      e.currentTarget.style.transform = 'translateY(-5px)'
-    }}
-    onMouseLeave={(e) => {
-      e.currentTarget.style.transform = 'translateY(0)'
-    }}
+    <div
+      style={{
+        backgroundColor: '#fff',
+        borderRadius: '8px',
+        overflow: 'hidden',
+        boxShadow: '0 3px 10px rgba(0,0,0,0.1)',
+      }}
     >
-      <Image
-        src={photo.src}
-        alt={photo.alt}
-        width={400}
-        height={300}
+      <button
+        onClick={() => onOpen(memory)}
+        aria-label={`Open ${memory.title}${extra > 0 ? `, ${memory.photos.length} photos` : ''}`}
         style={{
+          display: 'block',
+          position: 'relative',
           width: '100%',
           height: '300px',
-          objectFit: 'cover',
-          display: 'block',
-          backgroundColor: '#eee'
+          padding: 0,
+          border: 'none',
+          background: '#eee',
+          cursor: 'pointer',
         }}
-      />
-      
+      >
+        {cover && (
+          <Image
+            src={cover.src}
+            alt={memory.title}
+            fill
+            sizes="(max-width: 700px) 100vw, 400px"
+            style={{ objectFit: 'cover' }}
+          />
+        )}
+        {extra > 0 && (
+          <span
+            style={{
+              position: 'absolute',
+              right: '10px',
+              bottom: '10px',
+              background: 'rgba(0,0,0,0.6)',
+              color: '#fff',
+              fontSize: '13px',
+              padding: '4px 10px',
+              borderRadius: '999px',
+            }}
+          >
+            +{extra} more
+          </span>
+        )}
+      </button>
+
       <div style={{ padding: '20px' }}>
-        <h3 style={{
-          fontSize: '20px',
-          margin: '0 0 10px 0',
-          color: '#333'
-        }}>
-          {photo.title}
+        <h3 style={{ fontSize: '20px', margin: '0 0 10px 0', color: '#333' }}>
+          {memory.title}
         </h3>
-        
-        <div
-          onClick={() => window.open(`https://maps.google.com/maps?q=${encodeURIComponent(photo.location)}`, '_blank')}
+
+        <a
+          href={mapsUrl(memory)}
+          target="_blank"
+          rel="noopener noreferrer"
           style={{
             fontSize: '14px',
             color: '#888',
             marginBottom: '8px',
-            cursor: 'pointer',
             fontStyle: 'italic',
             display: 'flex',
             alignItems: 'center',
             gap: '4px',
-            transition: 'color 0.2s ease'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color = '#555'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color = '#888'
+            textDecoration: 'none',
           }}
         >
-          📍 {photo.location}
-        </div>
-        
-        <p style={{
-          fontSize: '14px',
-          color: '#777',
-          marginBottom: '15px'
-        }}>
-          {photo.date}
-        </p>
-        
-        <p style={{
-          fontSize: '16px',
-          lineHeight: '1.5',
-          color: '#555'
-        }}>
-          {photo.description}
+          📍 {memory.location}
+        </a>
+
+        <p style={{ fontSize: '14px', color: '#777', marginBottom: '15px' }}>{memory.date}</p>
+
+        <p style={{ fontSize: '16px', lineHeight: '1.5', color: '#555' }}>
+          {memory.description}
         </p>
       </div>
     </div>
   )
-} 
+}

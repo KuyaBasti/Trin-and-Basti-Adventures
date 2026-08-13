@@ -1,86 +1,156 @@
-# Trin and Basti Adventures
+# Trin and Basti Adventures — Our Photo Album
 
-Our website that contains our memories together in a Photo Album.
+A photo album documenting Trin and Basti's adventures together, built as a
+gift. It turns a camera roll into a story: photos are bulk-imported and grouped
+into **memories** — a day or an outing with one written description and all of
+that day's photos — using each photo's own EXIF date and GPS to fill in the
+when and where. The album reads oldest-first, like the year it records, under a
+live counter of how long we've been together.
 
-## Features
+There is no database and no third-party service beyond the hosting: images and
+a single JSON manifest live in Vercel Blob, the browser does the heavy lifting
+(EXIF, grouping, compression, geocoding), and one shared password lets the two
+of us add memories from any device.
 
-- **Modern Design**: Clean, responsive design with smooth animations
-- **Photo Gallery**: Organized photo grid with category filtering
-- **Featured Memory**: Special highlight for the most important moment
-- **Interactive**: Add new memories with a beautiful modal interface
-- **Responsive**: Works perfectly on all devices
-- **Fast Loading**: Optimized images and performance
+> **Status:** the memories model, bulk import, and lightbox gallery are built
+> and verified end-to-end locally — EXIF day-grouping, date/location autofill,
+> 16.5MB → ~750KB client compression, persistence across reloads. **Not yet
+> deployed:** the Vercel Blob store and env vars (`ALBUM_PASSWORD`,
+> `BLOB_READ_WRITE_TOKEN`) still need to be created in the dashboard, and the
+> Blob driver has never run in production. See
+> [Project status](#project-status).
 
-## Tech Stack
+---
 
-- **Next.js 15** - React framework with App Router
-- **TypeScript** - Type safety and better developer experience
-- **Tailwind CSS** - Utility-first CSS framework for styling
-- **Framer Motion** - Smooth animations and transitions
-- **Next.js Image** - Optimized image loading and performance
+## Table of Contents
 
-## Getting Started
+1. [What It Does](#what-it-does)
+2. [How It Works, End to End](#how-it-works-end-to-end)
+3. [Repository Map](#repository-map)
+4. [Design Principles](#design-principles)
+5. [Project Status](#project-status)
+6. [Quickstart](#quickstart)
+7. [Documentation](#documentation)
 
-1. Install dependencies:
+---
+
+## What It Does
+
+- **Import** — press **+**, enter the shared password once, select as many
+  photos as you like. They group themselves by the day they were taken; each
+  day becomes one draft card with its date filled in and its location resolved
+  from GPS. You write a title and one description per day.
+- **Compress** — every photo is re-encoded in the browser before upload
+  (longest edge 2400px, JPEG). A 16MB phone photo becomes roughly 750KB, which
+  keeps everything inside free tiers.
+- **Browse** — a chronological album of memory cards under a live
+  together-timer. Category filters appear only for categories that have
+  memories. Every location is a Google Maps link, using exact EXIF coordinates
+  when the photo carried them.
+- **Relive** — tapping a memory opens a gallery of all its photos: arrow keys
+  on desktop, swipe on a phone.
+
+## How It Works, End to End
+
+```
+   Camera roll (multi-select)
+        │
+   ┌────▼──────────────┐   exifr: date + GPS per photo
+   │  read & group     │   → one draft card per calendar day
+   └────┬──────────────┘   → location via OpenStreetMap (best-effort)
+        │   you write one title + description per day
+   ┌────▼──────────────┐   canvas re-encode, 2400px / JPEG q0.82
+   │  compress         │   16.5MB → ~750KB, orientation fixed
+   └────┬──────────────┘
+        │   one photo per request (Vercel 4.5MB body cap)
+   ┌────▼──────────────┐   POST /api/upload → stored URL
+   │  upload           │   then POST /api/memories with the URLs
+   └────┬──────────────┘
+        │
+   ┌────▼──────────────┐   Vercel Blob: memories.json + images
+   │  the album        │   (local dev: .data/ + public/uploads/)
+   └────┬──────────────┘
+        │
+   ┌────▼──────────────┐   chronological cards → lightbox gallery
+   │  browse & relive  │   filters · map links · together-timer
+   └───────────────────┘
+```
+
+The full architecture — every component, built and planned, with a data-flow
+diagram — lives in [SYSTEM-DESIGN.md](SYSTEM-DESIGN.md).
+
+## Repository Map
+
+| Dir | What |
+|-----|------|
+| `src/components/` | React client components — album page, import modal, lightbox, cards, timer |
+| `src/lib/` | The logic — types + sorting, storage drivers, auth, EXIF/compression, day-grouping |
+| `src/app/api/` | Route handlers — `auth` (password → cookie), `upload` (one image), `memories` (read/create) |
+| `src/data/` | Seed memories — first-run only; the manifest is truth afterwards |
+| `public/` | The original hardcoded photos (pre-upload era) |
+| `docs/` | Design docs and the progress log (see [Documentation](#documentation)) |
+| `.data/`, `public/uploads/` | Local dev storage — **git-ignored** |
+
+## Design Principles
+
+- **It's a gift first.** It has to just work when Trinity opens it — no broken
+  states, no half-features. Anything shipped gets verified in the browser.
+- **A memory is a day, not a photo.** One description per day is writing a
+  person will actually finish; per-photo captions at hundreds of photos is how
+  albums end up abandoned half-empty.
+- **The browser does the work; the server stays thin.** EXIF, grouping,
+  compression, and geocoding are client-side. The server authenticates, stores
+  bytes, and appends to a JSON manifest.
+- **No database.** A few hundred memories is a few hundred KB of JSON read
+  once per load. Chosen over Supabase specifically because its free tier
+  pauses after 7 idle days — fatal for a site visited occasionally.
+- **Fail closed.** No `ALBUM_PASSWORD` in production means uploads are refused,
+  never open. Reads are public; writes never are.
+- **Keep the neutral design.** Settled decision: the writing is the loudest
+  thing on the page. Functional and layout improvements welcome; no
+  re-theming.
+
+## Project Status
+
+The authoritative log lives in [docs/05-progress.md](docs/05-progress.md).
+
+| Stage | | |
+|---|---|---|
+| 0 · Static album | ✅ | Hardcoded photos, together-timer, map links (July 2025) |
+| 1 · Persistent uploads | ✅ | Storage drivers, password auth, EXIF autofill — superseded by Stage 2 |
+| 2 · Memories + bulk import | ✅ | Day-grouping, one-description-per-day, lightbox — verified locally |
+| 3 · Ship | ⬜ | **next** — create Blob store + env vars in Vercel, deploy, verify an import from a phone |
+| 4 · Manage | ⬜ | Edit/delete memories (typos are currently hand-edited JSON) |
+| 5 · Mobile pass | ⬜ | Tailwind migration; today's inline styles can't hold media queries |
+| 6 · Polish | ⬜ | Compress the 15MB seed PNGs, favicon, OG link preview |
+
+## Quickstart
+
 ```bash
 npm install
+npm run dev        # local storage, no accounts needed; dev password: letmein
+npx tsc --noEmit   # typecheck
+npm run build      # production build
 ```
 
-2. Run the development server:
-```bash
-npm run dev
-```
+For production: create a Blob store in the Vercel dashboard (**Storage →
+Create → Blob**, sets `BLOB_READ_WRITE_TOKEN` automatically) and add
+`ALBUM_PASSWORD` under **Settings → Environment Variables**. Details:
+[docs/04-deployment.md](docs/04-deployment.md).
 
-3. Open [http://localhost:3000](http://localhost:3000) in your browser
+## Documentation
 
-## Project Structure
+Start with the system design; the rest are referenced as needed.
 
-```
-Trin-and-Basti-Adventures/
-├── next-env.d.ts           # Next.js TypeScript declarations
-├── next.config.js          # Next.js configuration
-├── package-lock.json       # Package lock file
-├── package.json            # Dependencies and scripts
-├── postcss.config.js       # PostCSS configuration
-├── tailwind.config.js      # Tailwind CSS configuration
-├── tsconfig.json           # TypeScript configuration
-├── vercel.json             # Vercel deployment configuration
-├── README.md               # Project documentation
-├── public/                 # Static assets (photos)
-└── src/
-    ├── app/
-    │   ├── layout.tsx      # Root layout with metadata and fonts
-    │   ├── page.tsx        # Home page entry point
-    │   └── globals.css     # Global Tailwind styles
-    └── components/
-        ├── AdventuresPage.tsx   # Main page component with photo data
-        ├── Header.tsx           # Site header with relationship timer
-        ├── FeaturedMemory.tsx   # Featured photo display with location
-        ├── PhotoGrid.tsx        # Photo grid with category filtering
-        ├── PhotoCard.tsx        # Individual photo cards with clickable locations
-        ├── AddPhotoModal.tsx    # Modal for adding new photos with location
-        └── Footer.tsx           # Site footer
-```
+| Doc | What |
+|---|---|
+| [SYSTEM-DESIGN.md](SYSTEM-DESIGN.md) | Architecture, data-flow diagram, import trace, component inventory, decisions |
+| [docs/01 — Implementation pipeline](docs/01-implementation-pipeline.md) | The staged build order, with exit criteria |
+| [docs/02 — Data model](docs/02-data-model.md) | Memory/Photo types, the manifest, storage drivers |
+| [docs/03 — Import spec](docs/03-import-spec.md) | EXIF, day-grouping, compression, geocoding, limits |
+| [docs/04 — Deployment](docs/04-deployment.md) | Vercel + Blob setup, env vars, local dev storage |
+| [docs/05 — Progress](docs/05-progress.md) | Living status log |
 
-## Deployment
-
-This project is configured for deployment on Vercel:
-
-1. Connect your repository to Vercel
-2. Deploy automatically on every push to main
-3. Enjoy your beautiful photo album!
-
-## Adding New Photos
-
-1. Add your image files to the `public/images/` directory
-2. Use the "+" button on the site to add new memories
-3. Or edit the `initialPhotos` array in `AdventuresPage.tsx`
-
-## Customization
-
-- Edit the header message in `Header.tsx`
-- Modify the featured photo in `AdventuresPage.tsx`
-- Add new categories in `PhotoGrid.tsx`
-- Customize colors and styling in the component files
+---
 
 Built with ❤️ for my beautiful Princess!
