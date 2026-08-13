@@ -3,6 +3,22 @@
 Living record of what's shipped. Newest first — one dated entry per commit or
 coherent chunk of work. Keep it honest: unverified is unverified.
 
+## 2026-08-13 — Stage 3 complete: live in production, first real memory
+
+After the Next upgrade merged, the deploy promoted in ~20s. Verified from the
+API: 11 seed memories served, `configured: true` from the auth endpoint, and
+the Blob driver's first production run seeded `memories.json` into the store.
+Basti then imported the first real memory through the site — "In N Out",
+July 1 2025, one photo, location "Phoenix, Arizona" resolved from GPS —
+proving upload → compress → Blob → manifest end-to-end in production.
+Setup that got us here: Blob store `adventures-photos` (SFO1, **Public** —
+required, the app serves images by public URL; the read-write-token checkbox
+must be ticked on connect) plus `ALBUM_PASSWORD`, then a redeploy.
+Honest gap: not recorded which device the import came from, so iPhone
+HEIC-on-mobile-Safari may still be unexercised. Not a blocker — iOS converts
+HEIC to JPEG at file-pick — but worth a casual check next time a phone is
+handy.
+
 ## 2026-08-13 — deploy blocked by Vercel, Next upgraded 15.3.5 → 15.5.23
 
 Every production deploy since the merge errored *after* a successful build:
@@ -15,13 +31,13 @@ Lesson recorded: a Vercel deploy can fail *after* "Build Completed" — check
 
 ## Where things stand
 
-- **Stage 2 complete, locally verified.** Bulk import with EXIF day-grouping,
-  memories-with-many-photos model, lightbox gallery, password-gated two-phase
-  upload, client compression. Typecheck + production build clean.
-- **Nothing deployed.** Stages 1–2 and this doc set are uncommitted; the
-  Vercel Blob driver has never run in production; `ALBUM_PASSWORD` and the
-  Blob store don't exist in the dashboard yet. **Stage 3 (ship) is next.**
+- **The site is live and uploads work in production.**
+  `anniversary-one-taupe.vercel.app` serves the album from Vercel Blob; the
+  first real memory ("In N Out") was imported by Basti on 2026-08-13 with
+  EXIF date + GPS location autofill working end-to-end.
 - **Design settled:** keeping the original neutral look; no redesigns.
+- **Next:** Stage 4 (edit/delete) or Stage 5 (mobile layout pass) — Basti's
+  call. Bulk import of the photo backlog can start any time.
 
 ## Stage status
 
@@ -30,9 +46,9 @@ Lesson recorded: a Vercel deploy can fail *after* "Build Completed" — check
 | 0 Static album | ✅ done (July 2025) |
 | 1 Persistent uploads | ✅ done 2026-08-10 (superseded by Stage 2) |
 | 2 Memories + bulk import | ✅ done 2026-08-12, verified locally |
-| 3 Ship | ⬜ **next** — commit, Blob store + env vars, phone-verified import |
-| 4 Manage (edit/delete) | ⬜ |
-| 5 Mobile pass | ⬜ |
+| 3 Ship | ✅ done 2026-08-13 — live, real upload verified in production |
+| 4 Manage (edit/delete) | ⬜ next candidate |
+| 5 Mobile pass | ⬜ next candidate |
 | 6 Polish | ⬜ |
 
 ---

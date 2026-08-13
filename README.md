@@ -12,12 +12,10 @@ a single JSON manifest live in Vercel Blob, the browser does the heavy lifting
 (EXIF, grouping, compression, geocoding), and one shared password lets the two
 of us add memories from any device.
 
-> **Status:** the memories model, bulk import, and lightbox gallery are built
-> and verified end-to-end locally — EXIF day-grouping, date/location autofill,
-> 16.5MB → ~750KB client compression, persistence across reloads. **Not yet
-> deployed:** the Vercel Blob store and env vars (`ALBUM_PASSWORD`,
-> `BLOB_READ_WRITE_TOKEN`) still need to be created in the dashboard, and the
-> Blob driver has never run in production. See
+> **Status: live.** The album runs in production on Vercel + Blob storage,
+> and the first real memory was imported through the site on 2026-08-13 with
+> EXIF date and GPS location autofill working end-to-end. Next up: edit/delete
+> for memories and the mobile layout pass. See
 > [Project status](#project-status).
 
 ---
@@ -119,9 +117,9 @@ The authoritative log lives in [docs/05-progress.md](docs/05-progress.md).
 | 0 · Static album | ✅ | Hardcoded photos, together-timer, map links (July 2025) |
 | 1 · Persistent uploads | ✅ | Storage drivers, password auth, EXIF autofill — superseded by Stage 2 |
 | 2 · Memories + bulk import | ✅ | Day-grouping, one-description-per-day, lightbox — verified locally |
-| 3 · Ship | ⬜ | **next** — create Blob store + env vars in Vercel, deploy, verify an import from a phone |
-| 4 · Manage | ⬜ | Edit/delete memories (typos are currently hand-edited JSON) |
-| 5 · Mobile pass | ⬜ | Tailwind migration; today's inline styles can't hold media queries |
+| 3 · Ship | ✅ | Live at `anniversary-one-taupe.vercel.app`; real import verified in production |
+| 4 · Manage | ⬜ | **next candidate** — edit/delete memories (typos are currently hand-edited JSON) |
+| 5 · Mobile pass | ⬜ | **next candidate** — Tailwind migration; inline styles can't hold media queries |
 | 6 · Polish | ⬜ | Compress the 15MB seed PNGs, favicon, OG link preview |
 
 ## Quickstart

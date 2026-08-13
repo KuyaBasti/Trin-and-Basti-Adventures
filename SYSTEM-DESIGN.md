@@ -209,8 +209,8 @@ photos.
 | Image upload endpoint | API | route handler | ✅ built | `src/app/api/upload/route.ts` |
 | Memories read/create endpoint | API | route handler | ✅ built | `src/app/api/memories/route.ts` |
 | Storage driver — local disk | Storage | fs | ✅ built | `src/lib/storage.ts` |
-| Storage driver — Vercel Blob | Storage | @vercel/blob | ✅ built, **unverified in prod** | `src/lib/storage.ts` |
-| Production deploy (env vars + Blob store) | Ops | Vercel | ⬜ Stage 3 — **next** | Vercel dashboard |
+| Storage driver — Vercel Blob | Storage | @vercel/blob | ✅ built, verified in prod 2026-08-13 | `src/lib/storage.ts` |
+| Production deploy (env vars + Blob store) | Ops | Vercel | ✅ live — `anniversary-one-taupe.vercel.app` | Vercel dashboard |
 | Edit / delete memories | Web + API | — | ⬜ Stage 4 | — |
 | Mobile layout pass (Tailwind migration) | Web | Tailwind | ⬜ Stage 5 | — |
 | Seed image compression, favicon, OG image | Polish | — | ⬜ Stage 6 | `public/`, `src/app/` |
@@ -247,7 +247,7 @@ Detail and exit criteria live in
 | 0 | Static album — hardcoded photos, timer, map links | ✅ done (July 2025) |
 | 1 | Persistent uploads — storage drivers, auth, EXIF autofill | ✅ done 2026-08-10 (single-photo modal, superseded by Stage 2) |
 | 2 | Memories model + bulk import + lightbox | ✅ done 2026-08-12, verified end-to-end locally |
-| 3 | Ship — Blob store + env vars, deploy, phone-verified import | ⬜ **next** — code ready, needs Vercel dashboard steps |
-| 4 | Manage — edit/delete memories | ⬜ |
+| 3 | Ship — Blob store + env vars, deploy, real import verified live | ✅ done 2026-08-13 |
+| 4 | Manage — edit/delete memories | ⬜ **next candidate** |
 | 5 | Mobile layout pass — Tailwind migration, responsive type/spacing | ⬜ |
 | 6 | Polish — compress seed PNGs, favicon, OG link preview | ⬜ |
