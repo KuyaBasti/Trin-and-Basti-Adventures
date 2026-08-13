@@ -42,6 +42,16 @@ export function coverOf(memory: Memory): Photo | undefined {
   return memory.photos.find((p) => p.id === memory.coverId) ?? memory.photos[0]
 }
 
+/** Photos within a memory: dated ones in order, undated ones last, stable. */
+export function sortPhotos(photos: Photo[]): Photo[] {
+  return [...photos].sort((a, b) => {
+    if (!a.takenAt && !b.takenAt) return 0
+    if (!a.takenAt) return 1
+    if (!b.takenAt) return -1
+    return a.takenAt.localeCompare(b.takenAt)
+  })
+}
+
 /** Oldest first, so the album reads as a story. */
 export function byDate<T extends { takenAt: string }>(items: T[]): T[] {
   return [...items].sort((a, b) => a.takenAt.localeCompare(b.takenAt))

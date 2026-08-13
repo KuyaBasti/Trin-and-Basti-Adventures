@@ -3,6 +3,41 @@
 Living record of what's shipped. Newest first — one dated entry per commit or
 coherent chunk of work. Keep it honest: unverified is unverified.
 
+## 2026-08-13 — merge-on-import + cover picker (Stage 4 begins)
+
+Basti's ask: clicking a memory should reveal the *other* photos from that
+day, with a chosen main image. The gallery already existed; what was missing
+was getting photos INTO an existing memory and choosing its cover. Built:
+
+- **Merge-on-import**: a day that matches exactly one existing memory
+  defaults to joining it (dropdown to opt out or to pick among multiple
+  same-day memories — ambiguous days default to a separate memory). Merged
+  drafts need no writing; they inherit the day's story.
+- **`PATCH /api/memories/[id]`** — `addPhotos` and/or `coverId`.
+- **Cover picker** in the lightbox ("Make this the cover", ★ on the cover
+  thumbnail), shown only on unlocked devices.
+
+A 14-agent adversarial review of the diff confirmed 9 findings, all fixed
+before merge; the notable ones:
+
+- **Retry-after-partial-failure duplicated data** (high): committed drafts
+  now leave the retry set, partial successes flush to the page, and the
+  server skips photos whose stored URL the memory already has — a retried
+  import is now idempotent (verified by identical double-PATCH).
+- **Manifest write races**: all writers now go through a serialized
+  `updateManifest`; closing the modal mid-upload is blocked; cross-instance
+  last-write-wins remains as documented.
+- **Merging re-sorted existing photos**, silently flipping the implicit
+  cover: PATCH now pins the current cover and appends instead of re-sorting.
+- **Any URL could be persisted as a photo src** (and next/image's
+  `*.public.blob.vercel-storage.com` allowlist matches every Vercel
+  customer's store): both write routes now accept only this app's own
+  storage URLs (`isOwnSrc`).
+- Import is disabled until the album has loaded (unknown state used to skip
+  merge detection → duplicate days); a stale-closure bug that hid the
+  password screen on mid-import 401 is fixed; malformed JSON bodies now 400
+  instead of 500.
+
 ## 2026-08-13 — Stage 3 complete: live in production, first real memory
 
 After the Next upgrade merged, the deploy promoted in ~20s. Verified from the

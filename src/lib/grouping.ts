@@ -18,6 +18,12 @@ export interface Draft {
   files: PreparedFile[]
   /** Set false to leave this day out of the import. */
   include: boolean
+  /**
+   * When set, these photos join an existing memory from the same day instead
+   * of becoming a new one. Chosen in the review step; defaulted to the
+   * existing memory when the day matches exactly one.
+   */
+  mergeTargetId?: string
 }
 
 export const UNDATED = 'undated'

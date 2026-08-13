@@ -208,6 +208,9 @@ photos.
 | Auth (password → HMAC cookie) | API | Node crypto | ✅ built | `src/lib/auth.ts`, `src/app/api/auth/` |
 | Image upload endpoint | API | route handler | ✅ built | `src/app/api/upload/route.ts` |
 | Memories read/create endpoint | API | route handler | ✅ built | `src/app/api/memories/route.ts` |
+| Memory edit endpoint (addPhotos, coverId) | API | route handler | ✅ built 2026-08-13 | `src/app/api/memories/[id]/route.ts` |
+| Merge-on-import (same-day photos join existing memory) | Web | React | ✅ built 2026-08-13 | `src/components/ImportModal.tsx` |
+| Cover picker (lightbox) | Web | React | ✅ built 2026-08-13 | `src/components/Lightbox.tsx` |
 | Storage driver — local disk | Storage | fs | ✅ built | `src/lib/storage.ts` |
 | Storage driver — Vercel Blob | Storage | @vercel/blob | ✅ built, verified in prod 2026-08-13 | `src/lib/storage.ts` |
 | Production deploy (env vars + Blob store) | Ops | Vercel | ✅ live — `anniversary-one-taupe.vercel.app` | Vercel dashboard |
@@ -248,6 +251,6 @@ Detail and exit criteria live in
 | 1 | Persistent uploads — storage drivers, auth, EXIF autofill | ✅ done 2026-08-10 (single-photo modal, superseded by Stage 2) |
 | 2 | Memories model + bulk import + lightbox | ✅ done 2026-08-12, verified end-to-end locally |
 | 3 | Ship — Blob store + env vars, deploy, real import verified live | ✅ done 2026-08-13 |
-| 4 | Manage — edit/delete memories | ⬜ **next candidate** |
+| 4 | Manage — edit/delete memories | ◐ started 2026-08-13 — add-photos + cover done; text edit + delete remain |
 | 5 | Mobile layout pass — Tailwind migration, responsive type/spacing | ⬜ |
 | 6 | Polish — compress seed PNGs, favicon, OG link preview | ⬜ |

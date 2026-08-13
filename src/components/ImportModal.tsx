@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { CATEGORIES, formatDate, type Memory, type PhotoCategory } from '@/lib/photos'
 import { compressImage, reverseGeocode } from '@/lib/client-image'
 import { buildDrafts, coordsOf, UNDATED, type Draft } from '@/lib/grouping'
@@ -8,12 +8,20 @@ import { buildDrafts, coordsOf, UNDATED, type Draft } from '@/lib/grouping'
 interface ImportModalProps {
   isOpen: boolean
   onClose: () => void
+  /** Every memory already in the album, so same-day imports can join them. */
+  existing: Memory[]
+  /** New and updated memories alike; the page upserts by id. */
   onImported: (memories: Memory[]) => void
 }
 
 type Phase = 'password' | 'pick' | 'reading' | 'review' | 'uploading'
 
-export default function ImportModal({ isOpen, onClose, onImported }: ImportModalProps) {
+export default function ImportModal({
+  isOpen,
+  onClose,
+  existing,
+  onImported,
+}: ImportModalProps) {
   const [phase, setPhase] = useState<Phase>('pick')
   const [password, setPassword] = useState('')
   const [drafts, setDrafts] = useState<Draft[]>([])
@@ -70,6 +78,15 @@ export default function ImportModal({ isOpen, onClose, onImported }: ImportModal
 
     const built = await buildDrafts([...files], (done, total) => setRead({ done, total }))
     objectUrls.current.push(...built.flatMap((d) => d.files.map((f) => f.previewUrl)))
+
+    // A day that matches exactly one existing memory defaults to joining it —
+    // that is almost always what "more photos from that day" means. Ambiguous
+    // days (two memories share the date) default to a new memory instead.
+    for (const draft of built) {
+      const matches = existing.filter((m) => m.takenAt === draft.key)
+      if (matches.length === 1) draft.mergeTargetId = matches[0].id
+    }
+
     setDrafts(built)
     setPhase('review')
 
@@ -98,7 +115,9 @@ export default function ImportModal({ isOpen, onClose, onImported }: ImportModal
       return
     }
     const missing = chosen.find(
-      (d) => !d.title || !d.location || !d.description || !d.takenAt,
+      (d) =>
+        !d.mergeTargetId &&
+        (!d.title || !d.location || !d.description || !d.takenAt),
     )
     if (missing) {
       setError(
@@ -146,44 +165,78 @@ export default function ImportModal({ isOpen, onClose, onImported }: ImportModal
           setSent({ done, total: totalPhotos })
         }
 
-        const res = await fetch('/api/memories', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            title: draft.title,
-            location: draft.location,
-            description: draft.description,
-            takenAt: draft.takenAt,
-            category: draft.category,
-            photos: uploaded,
-          }),
-        })
+        const res = draft.mergeTargetId
+          ? await fetch(`/api/memories/${draft.mergeTargetId}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ addPhotos: uploaded }),
+            })
+          : await fetch('/api/memories', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                title: draft.title,
+                location: draft.location,
+                description: draft.description,
+                takenAt: draft.takenAt,
+                category: draft.category,
+                photos: uploaded,
+              }),
+            })
         const data = await res.json().catch(() => ({}))
         if (!res.ok) throw new Error(data.error ?? 'Could not save the memory.')
         created.push(data.memory as Memory)
+        // This draft is committed server-side. Drop it from state so a retry
+        // after a later failure re-runs only what actually failed — otherwise
+        // every retry would re-add these photos to the album.
+        setDrafts((prev) => prev.filter((d) => d.key !== draft.key))
       }
 
       onImported(created)
       close()
     } catch (err) {
+      // Days that committed before the failure are real — show them on the
+      // page now rather than leaving it stale until a reload.
+      if (created.length > 0) onImported(created)
       setError(err instanceof Error ? err.message : 'Something went wrong.')
-      if (phase !== 'password') setPhase('review')
+      // Functional read: the 401 path just queued setPhase('password'), and
+      // the closure's stale `phase` must not clobber it back to review.
+      setPhase((p) => (p === 'password' ? p : 'review'))
     }
   }
 
   if (!isOpen) return null
 
+  // Closing mid-upload would leave the submit loop writing to the album with
+  // no progress UI — and reopening could start a second, racing import.
+  const safeClose = phase === 'uploading' ? undefined : close
+
   const photoCount = drafts.reduce((n, d) => n + (d.include ? d.files.length : 0), 0)
   const dayCount = drafts.filter((d) => d.include).length
+  const newCount = drafts.filter((d) => d.include && !d.mergeTargetId).length
+  const mergeCount = dayCount - newCount
+  const submitLabel = [
+    newCount > 0 ? `Add ${newCount} ${newCount === 1 ? 'memory' : 'memories'}` : '',
+    mergeCount > 0
+      ? `${newCount > 0 ? 'add' : 'Add'} photos to ${mergeCount} existing`
+      : '',
+  ]
+    .filter(Boolean)
+    .join(' · ')
 
   return (
-    <div style={overlay} onClick={close}>
+    <div style={overlay} onClick={safeClose}>
       <div style={panel} onClick={(e) => e.stopPropagation()}>
         <div style={headerRow}>
           <h2 style={{ fontSize: '24px', margin: 0 }}>
             {phase === 'review' ? `${dayCount} days, ${photoCount} photos` : 'Add Memories'}
           </h2>
-          <button onClick={close} aria-label="Close" style={closeButton}>
+          <button
+            onClick={safeClose}
+            aria-label="Close"
+            disabled={phase === 'uploading'}
+            style={{ ...closeButton, opacity: phase === 'uploading' ? 0.3 : 1 }}
+          >
             ×
           </button>
         </div>
@@ -253,13 +306,18 @@ export default function ImportModal({ isOpen, onClose, onImported }: ImportModal
             </p>
 
             {drafts.map((draft) => (
-              <DraftCard key={draft.key} draft={draft} onChange={update} />
+              <DraftCard
+                key={draft.key}
+                draft={draft}
+                candidates={existing.filter((m) => m.takenAt === draft.key)}
+                onChange={update}
+              />
             ))}
 
             {error && <p style={errorText}>{error}</p>}
 
             <button onClick={submit} style={{ ...primary, marginTop: '8px' }}>
-              Add {dayCount} {dayCount === 1 ? 'memory' : 'memories'}
+              {submitLabel || 'Nothing selected'}
             </button>
           </>
         )}
@@ -285,12 +343,16 @@ function Bar({ value, max }: { value: number; max: number }) {
 
 function DraftCard({
   draft,
+  candidates,
   onChange,
 }: {
   draft: Draft
+  /** Existing memories from this same day, offered as merge targets. */
+  candidates: Memory[]
   onChange: (key: string, patch: Partial<Draft>) => void
 }) {
   const undated = draft.key === UNDATED
+  const mergeTarget = candidates.find((m) => m.id === draft.mergeTargetId)
   return (
     <div
       style={{
@@ -342,7 +404,38 @@ function DraftCard({
         )}
       </div>
 
-      {draft.include && (
+      {draft.include && candidates.length > 0 && (
+        <div style={{ marginBottom: '12px' }}>
+          <label style={{ fontSize: '13px', color: '#666', display: 'block', marginBottom: '6px' }}>
+            You already have {candidates.length === 1 ? 'a memory' : 'memories'} from this
+            day
+          </label>
+          <select
+            value={draft.mergeTargetId ?? ''}
+            onChange={(e) =>
+              onChange(draft.key, { mergeTargetId: e.target.value || undefined })
+            }
+            style={input}
+          >
+            <option value="">Create a new, separate memory</option>
+            {candidates.map((m) => (
+              <option key={m.id} value={m.id}>
+                Add these photos to &ldquo;{m.title}&rdquo;
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
+      {draft.include && mergeTarget && (
+        <p style={{ fontSize: '13px', color: '#666', margin: '0 0 4px' }}>
+          {draft.files.length === 1 ? 'This photo joins' : 'These photos join'}{' '}
+          <strong>&ldquo;{mergeTarget.title}&rdquo;</strong> — they share its story, so
+          there&apos;s nothing more to write.
+        </p>
+      )}
+
+      {draft.include && !mergeTarget && (
         <>
           {undated && (
             <input
