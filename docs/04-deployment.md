@@ -3,9 +3,14 @@
 Vercel hosting + Vercel Blob storage. The repo deploys on push to `main`
 (`vercel.json`, `@vercel/next`).
 
-## One-time setup (Vercel dashboard)
+**Production:** `https://anniversary-one-taupe.vercel.app` (Vercel project is
+still named `anniversary`). Store: `adventures-photos`, SFO1, **Public** —
+public is required; the app serves images by their public Blob URLs.
 
-Uploads do not work in production until both exist:
+## One-time setup (Vercel dashboard) — ✅ done 2026-08-13
+
+Both exist and are verified. For the record, uploads do not work in
+production until both exist:
 
 1. **Storage → Create → Blob** — creates the store and sets
    `BLOB_READ_WRITE_TOKEN` on the project automatically.

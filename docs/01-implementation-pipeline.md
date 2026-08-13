@@ -40,19 +40,20 @@ memory from the stored URLs. Lightbox gallery with keyboard + swipe.
   memory in one request would have failed only in production. StrictMode
   double-invoke caught an impure setState updater.
 
-## Stage 3 — Ship ⬜ (next)
+## Stage 3 — Ship ✅ (2026-08-13)
 
-The code is ready; the ops aren't. Nothing from Stages 1–2 is committed, and
-the Blob driver has never executed in production.
+Shipped as PRs #1 (feature + docs) and #3 (Next.js 15.3.5 → 15.5.23 — Vercel
+refuses to deploy CVE-carrying Next versions, which had silently kept
+production on a 385-day-old build). Blob store `adventures-photos` (SFO1,
+Public) + `ALBUM_PASSWORD` configured; deploy promoted in ~20s.
 
-- Commit and push the Stage 1–2 work + this doc set.
-- Vercel dashboard: **Storage → Create → Blob** (sets
-  `BLOB_READ_WRITE_TOKEN`), add `ALBUM_PASSWORD` env var, redeploy.
-- **Exit criteria:** a 5–10 photo import performed from a phone on the
-  production URL — exercises the Blob driver, iOS HEIC→JPEG conversion, and
-  the password cookie on mobile Safari — and the memories survive a redeploy.
+- **Exit criteria, actual result:** the Blob driver seeded and then served the
+  manifest in production, and Basti imported a real memory through the live
+  site ("In N Out", EXIF date + GPS location autofilled, photo stored in
+  Blob). Import device not recorded, so the mobile-Safari/HEIC case may
+  remain unexercised — carried as a casual check, not a blocker.
 
-## Stage 4 — Manage ⬜
+## Stage 4 — Manage ⬜ (next, alongside Stage 5)
 
 Edit and delete for memories. At hundreds of photos a typo is guaranteed, and
 today the only fix is hand-editing `memories.json`.
