@@ -37,7 +37,10 @@ of us add memories from any device.
 - **Import** — press **+**, enter the shared password once, select as many
   photos as you like. They group themselves by the day they were taken; each
   day becomes one draft card with its date filled in and its location resolved
-  from GPS. You write a title and one description per day.
+  from GPS. You write a title and one description per day — and photos from a
+  day that already has a memory simply join it, nothing to write at all.
+- **Choose the cover** — in any memory's gallery, "Make this the cover" picks
+  which photo fronts the card.
 - **Compress** — every photo is re-encoded in the browser before upload
   (longest edge 2400px, JPEG). A 16MB phone photo becomes roughly 750KB, which
   keeps everything inside free tiers.
