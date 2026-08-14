@@ -66,7 +66,12 @@ export async function POST(request: Request) {
     )
   }
 
-  if (Number.isNaN(Date.parse(`${takenAt}T00:00:00Z`))) {
+  // Strict YYYY-MM-DD with a round-trip: chronology is a localeCompare over
+  // these strings, so a parseable-but-loose "2025-6-1" would sort wrong.
+  if (
+    !/^\d{4}-\d{2}-\d{2}$/.test(takenAt) ||
+    new Date(`${takenAt}T00:00:00Z`).toISOString().slice(0, 10) !== takenAt
+  ) {
     return NextResponse.json({ error: 'That date did not make sense.' }, { status: 400 })
   }
 
