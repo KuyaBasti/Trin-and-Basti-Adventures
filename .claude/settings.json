@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node -e 'let d=\"\";process.stdin.on(\"data\",c=>d+=c).on(\"end\",()=>{try{const cmd=(JSON.parse(d).tool_input||{}).command||\"\";if(/git commit/.test(cmd))console.log(JSON.stringify({hookSpecificOutput:{hookEventName:\"PostToolUse\",additionalContext:\"A git commit just ran. Run the docs pass (docs/README.md): add a dated entry to docs/05-progress.md now; update README.md and SYSTEM-DESIGN.md too if structure or status changed.\"}}))}catch(e){}})'",
+            "command": "node -e 'let d=\"\";process.stdin.on(\"data\",c=>d+=c).on(\"end\",()=>{try{const cmd=(JSON.parse(d).tool_input||{}).command||\"\";if(/git commit/.test(cmd))console.log(JSON.stringify({hookSpecificOutput:{hookEventName:\"PostToolUse\",additionalContext:\"A git commit just ran. Convention: docs ship in their own PR after the code PR. If this was a code commit, prepare the follow-up docs PR (docs/README.md docs pass): dated entry in docs/05-progress.md; README.md and SYSTEM-DESIGN.md if structure or status changed. If this was the docs PR, the pass is done.\"}}))}catch(e){}})'",
             "timeout": 10,
             "statusMessage": "Checking docs pass"
           }

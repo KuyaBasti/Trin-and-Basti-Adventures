@@ -70,6 +70,10 @@ after any commit that changes behavior — sweep and make them match reality:
 with the reason — never leave a doc implying it exists. A stale doc is worse
 than no doc.
 
+**Docs ship in their own PR, separate from code, merged after it.** A major
+change is two PRs by convention: the code PR, then the docs PR that records
+it.
+
 ## Principle
 
 Keep `CLAUDE.md` concise routing.
