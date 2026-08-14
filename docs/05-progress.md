@@ -3,6 +3,32 @@
 Living record of what's shipped. Newest first — one dated entry per commit or
 coherent chunk of work. Keep it honest: unverified is unverified.
 
+## 2026-08-13 — Stage 4 complete: edit, remove photo, delete memory (PR #7)
+
+The last management gap: typos and mistakes are now fixable on the site
+itself, never by hand-editing JSON. `PATCH /api/memories/[id]` gained text
+fields and `removePhotoIds`; a new `DELETE` removes a memory. The lightbox
+grew an Edit panel (prefilled, sends only changed fields), a two-step
+remove-photo confirm, and a double-confirmed delete that spells out the
+photo count. Stored images are cleaned up best-effort after the manifest
+write is durable; seed assets in `public/` are structurally untouchable.
+
+A 19-agent adversarial review confirmed 14 findings, all fixed pre-merge.
+The one worth remembering: **`isOwnSrc` checked hostname only, and the
+manifest lives on the same host** — a crafted photo src naming
+`memories.json` would, on deletion, have destroyed the whole album and
+reset it to seeds. It now requires the `/memories/` path prefix. Also:
+files are deleted only when the freshly written manifest no longer
+references them (remove+re-add, shared srcs); strict `YYYY-MM-DD`
+round-trip dates (loose ones corrupt the localeCompare chronology);
+retried DELETE is a no-op success; while editing, every close/navigation
+path is inert so unsaved edits can't be lost.
+
+Accepted-tradeoff note: the documented cross-instance last-write-wins race
+now includes best-effort image deletion — a delete racing a concurrent edit
+on another device can resurrect a memory whose files are gone. Accepted at
+two users; recorded in SYSTEM-DESIGN's decisions table.
+
 ## 2026-08-13 — workflow decision: docs ship as their own PR
 
 Adopted the FinancialTracker convention verbatim: every major change is two

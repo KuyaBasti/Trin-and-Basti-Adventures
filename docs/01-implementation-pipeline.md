@@ -53,15 +53,18 @@ Public) + `ALBUM_PASSWORD` configured; deploy promoted in ~20s.
   Blob). Import device not recorded, so the mobile-Safari/HEIC case may
   remain unexercised — carried as a casual check, not a blocker.
 
-## Stage 4 — Manage ⬜ (next, alongside Stage 5)
+## Stage 4 — Manage ✅ (2026-08-13)
 
-Edit and delete for memories. At hundreds of photos a typo is guaranteed, and
-today the only fix is hand-editing `memories.json`.
+Landed in two parts: merge-on-import + cover picker (PR #5), then edit /
+remove-photo / delete-memory (PR #7), each hardened by an adversarial review
+before merge (9 and 14 confirmed findings respectively — see
+[05-progress.md](05-progress.md) for the notable ones).
 
-- Delete memory (and its Blob images); edit title/location/date/description;
-  optionally re-cover.
-- **Exit criteria:** fix a typo and remove a photo entirely from the phone,
-  no manual JSON.
+- **Exit criteria, actual result:** a typo is fixable and a photo removable
+  from the site on any unlocked device, no manual JSON — verified in the
+  browser (text edit with date re-derivation, on-disk cleanup on
+  remove/delete, last-photo guard, idempotent delete, safe back-out from
+  every confirm).
 
 ## Stage 5 — Mobile pass ⬜
 
