@@ -208,7 +208,8 @@ photos.
 | Auth (password → HMAC cookie) | API | Node crypto | ✅ built | `src/lib/auth.ts`, `src/app/api/auth/` |
 | Image upload endpoint | API | route handler | ✅ built | `src/app/api/upload/route.ts` |
 | Memories read/create endpoint | API | route handler | ✅ built | `src/app/api/memories/route.ts` |
-| Memory edit endpoint (addPhotos, coverId) | API | route handler | ✅ built 2026-08-13 | `src/app/api/memories/[id]/route.ts` |
+| Memory edit endpoint (text, addPhotos, removePhotoIds, coverId) + DELETE | API | route handler | ✅ built 2026-08-13 | `src/app/api/memories/[id]/route.ts` |
+| Edit panel, remove-photo, delete-memory UI | Web | React | ✅ built 2026-08-13 | `src/components/Lightbox.tsx` |
 | Merge-on-import (same-day photos join existing memory) | Web | React | ✅ built 2026-08-13 | `src/components/ImportModal.tsx` |
 | Cover picker (lightbox) | Web | React | ✅ built 2026-08-13 | `src/components/Lightbox.tsx` |
 | Storage driver — local disk | Storage | fs | ✅ built | `src/lib/storage.ts` |
@@ -236,7 +237,7 @@ photos.
 | Auth failure mode | `ALBUM_PASSWORD` unset in prod ⇒ uploads refused | Fail closed — never an open write endpoint on a public URL |
 | Date display | Format in UTC | Bare-date parsing yields UTC midnight; local formatting shows "the day before" west of Greenwich |
 | Design language | Keep the original neutral grey — **settled with Basti 2026-08-10** | Photos vary wildly in color; the writing is the emotional core and neutral styling keeps it loudest. No redesigns unprompted |
-| Manifest concurrency | Last-write-wins, no locking | Two occasional users; a lock scheme is complexity without a customer |
+| Manifest concurrency | Serialized per instance (`updateManifest`); last-write-wins across instances | Two occasional users; a CAS scheme is complexity without a customer. Note: since image deletion exists (2026-08-13), the cross-instance race can resurrect a memory whose files were deleted — accepted |
 
 ---
 
@@ -251,6 +252,6 @@ Detail and exit criteria live in
 | 1 | Persistent uploads — storage drivers, auth, EXIF autofill | ✅ done 2026-08-10 (single-photo modal, superseded by Stage 2) |
 | 2 | Memories model + bulk import + lightbox | ✅ done 2026-08-12, verified end-to-end locally |
 | 3 | Ship — Blob store + env vars, deploy, real import verified live | ✅ done 2026-08-13 |
-| 4 | Manage — edit/delete memories | ◐ started 2026-08-13 — add-photos + cover done; text edit + delete remain |
-| 5 | Mobile layout pass — Tailwind migration, responsive type/spacing | ⬜ |
+| 4 | Manage — edit/delete memories | ✅ done 2026-08-13 |
+| 5 | Mobile layout pass — Tailwind migration, responsive type/spacing | ⬜ **next** |
 | 6 | Polish — compress seed PNGs, favicon, OG link preview | ⬜ |

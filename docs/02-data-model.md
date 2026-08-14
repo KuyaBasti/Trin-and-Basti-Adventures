@@ -75,11 +75,16 @@ else local disk:
 The interface is deliberately three methods so a future storage move
 (Supabase, S3) is one new ~40-line driver, nothing else.
 
-## Editing (`PATCH /api/memories/[id]`)
+## Editing (`PATCH` / `DELETE /api/memories/[id]`)
 
-Two operations, both session-gated: `addPhotos` (same shape as POST's
-`photos`) appends to an existing memory, and `coverId` picks which photo
-fronts the card. Rules enforced server-side:
+All session-gated. PATCH accepts any combination of: `addPhotos` (append),
+`removePhotoIds` (never the last photo), `coverId`, and the text fields
+(`title`, `location`, `description`, `category`, `takenAt` — strict
+`YYYY-MM-DD`, display date re-derived). DELETE removes the memory outright
+and is idempotent (a retried delete is a no-op success). Stored images are
+cleaned up best-effort *after* the manifest write is durable, and **only when
+no memory in the freshly written manifest still references them**. Rules
+enforced server-side:
 
 - Photos already in the memory (matched by stored URL) are skipped, so a
   retried import cannot duplicate.

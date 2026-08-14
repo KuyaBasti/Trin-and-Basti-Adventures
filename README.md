@@ -41,6 +41,9 @@ of us add memories from any device.
   day that already has a memory simply join it, nothing to write at all.
 - **Choose the cover** — in any memory's gallery, "Make this the cover" picks
   which photo fronts the card.
+- **Fix and prune** — edit any memory's title, place, date, or story; remove a
+  photo (two-step confirm); or delete a whole memory (double-confirmed, photo
+  count spelled out). All from the site, on an unlocked device.
 - **Compress** — every photo is re-encoded in the browser before upload
   (longest edge 2400px, JPEG). A 16MB phone photo becomes roughly 750KB, which
   keeps everything inside free tiers.
@@ -121,8 +124,8 @@ The authoritative log lives in [docs/05-progress.md](docs/05-progress.md).
 | 1 · Persistent uploads | ✅ | Storage drivers, password auth, EXIF autofill — superseded by Stage 2 |
 | 2 · Memories + bulk import | ✅ | Day-grouping, one-description-per-day, lightbox — verified locally |
 | 3 · Ship | ✅ | Live at `anniversary-one-taupe.vercel.app`; real import verified in production |
-| 4 · Manage | ⬜ | **next candidate** — edit/delete memories (typos are currently hand-edited JSON) |
-| 5 · Mobile pass | ⬜ | **next candidate** — Tailwind migration; inline styles can't hold media queries |
+| 4 · Manage | ✅ | Edit, remove-photo, delete — from the site, review-hardened |
+| 5 · Mobile pass | ⬜ | **next** — Tailwind migration; inline styles can't hold media queries |
 | 6 · Polish | ⬜ | Compress the 15MB seed PNGs, favicon, OG link preview |
 
 ## Quickstart
