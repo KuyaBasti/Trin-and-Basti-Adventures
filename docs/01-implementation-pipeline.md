@@ -66,15 +66,17 @@ before merge (9 and 14 confirmed findings respectively — see
   remove/delete, last-photo guard, idempotent delete, safe back-out from
   every confirm).
 
-## Stage 5 — Mobile pass ⬜
+## Stage 5 — Mobile pass ✅ (2026-08-13)
 
-The layout is desktop-only: inline `style={{}}` objects can't hold media
-queries, so the 48px title and 500px hero render identically on a phone —
-Trinity's primary device. Migrate to the already-installed Tailwind and make
-type, spacing, and the grid responsive.
+Landed as PR #9: real Tailwind v4 (the old pipeline silently generated
+nothing), all eight components on responsive classes, desktop pixel-parity
+held via a documented parity layer in `globals.css`.
 
-- **Exit criteria:** album, import, and lightbox all comfortable at 375px
-  width; no horizontal scroll; hover-only affordances have touch equivalents.
+- **Exit criteria, actual result:** at 375px the album, import modal, and
+  lightbox all fit with zero horizontal scroll; 768px two-column; ≥1024px
+  measured pixel-identical (48px/500px/1200px). Inputs ≥16px on mobile so
+  iOS Safari never zooms. A 16-agent parity review confirmed 14 invisible
+  divergences (heading weight, line-height, box-sizing) — all fixed.
 
 ## Stage 6 — Polish ⬜
 

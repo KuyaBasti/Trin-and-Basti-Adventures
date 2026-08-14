@@ -78,5 +78,7 @@ of truth.
 ## Stack
 
 Next.js 15 (App Router) · React 19 · TypeScript · Vercel hosting + Vercel Blob
-storage · exifr (EXIF) · inline styles today (Tailwind installed, unused —
-mobile pass will migrate) · framer-motion installed but unused.
+storage · exifr (EXIF) · Tailwind v4 for layout (responsive classes; dynamic
+values stay inline) — `globals.css` carries a **parity layer** pinning the UA
+defaults the design depends on (heading weight, line-height, button font);
+read its comment before touching preflight-adjacent styling.
