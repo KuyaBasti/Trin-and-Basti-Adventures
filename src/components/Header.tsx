@@ -33,46 +33,24 @@ export default function Header() {
     return () => clearInterval(interval)
   }, [])
   return (
-    <header style={{
-      backgroundColor: '#fff',
-      boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-      padding: '20px 0',
-      textAlign: 'center',
-      position: 'relative'
-    }}>
-      <div style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
-        padding: '0 15px'
-      }}>
-        <h1 style={{
-          fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
-          fontSize: '48px',
-          margin: '0',
-          color: '#333',
-          textAlign: 'center'
-        }}>
+    <header className="relative bg-white py-4 text-center shadow-[0_2px_5px_rgba(0,0,0,0.1)] sm:py-5">
+      <div className="mx-auto box-content max-w-[1200px] px-[15px]">
+        <h1
+          className="m-0 text-center text-[30px] text-[#333] sm:text-[40px] lg:text-[48px]"
+          style={{
+            fontFamily: 'var(--font-playfair), "Playfair Display", Georgia, serif',
+          }}
+        >
           Trin and Basti Adventures
         </h1>
-        <p style={{
-          fontStyle: 'italic',
-          margin: '10px 0',
-          fontSize: '18px',
-          color: '#777',
-          textAlign: 'center'
-        }}>
-          I am so lucky to have you in my life. The moments we've shared have been nothing 
-          short of magical. I am so grateful to have you in my life. 
-          I love you more than words can say. 
+        <p className="my-2.5 text-center text-[15px] italic text-[#777] sm:text-[18px]">
+          I am so lucky to have you in my life. The moments we&apos;ve shared have been
+          nothing short of magical. I am so grateful to have you in my life. I love you
+          more than words can say.
         </p>
-        <div style={{
-          textAlign: 'center',
-          marginTop: '15px',
-          fontSize: '14px',
-          color: '#999',
-          fontStyle: 'italic'
-        }}>
-          Together for {timeElapsed.days} days, {timeElapsed.hours} hours, {timeElapsed.minutes} minutes, and {timeElapsed.seconds} seconds 💕
+        <div className="mt-3 text-center text-[13px] italic text-[#999] sm:mt-[15px] sm:text-[14px]">
+          Together for {timeElapsed.days} days, {timeElapsed.hours} hours,{' '}
+          {timeElapsed.minutes} minutes, and {timeElapsed.seconds} seconds 💕
         </div>
       </div>
     </header>

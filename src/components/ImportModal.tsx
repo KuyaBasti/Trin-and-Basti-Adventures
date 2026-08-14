@@ -225,10 +225,16 @@ export default function ImportModal({
     .join(' · ')
 
   return (
-    <div style={overlay} onClick={safeClose}>
-      <div style={panel} onClick={(e) => e.stopPropagation()}>
+    <div
+      className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/70 p-3 sm:p-4"
+      onClick={safeClose}
+    >
+      <div
+        className="max-h-[90vh] w-full max-w-[640px] overflow-y-auto rounded-[10px] bg-white p-4 sm:p-7"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div style={headerRow}>
-          <h2 style={{ fontSize: '24px', margin: 0 }}>
+          <h2 className="m-0 text-[20px] sm:text-[24px]">
             {phase === 'review' ? `${dayCount} days, ${photoCount} photos` : 'Add Memories'}
           </h2>
           <button
@@ -483,27 +489,6 @@ function DraftCard({
       )}
     </div>
   )
-}
-
-const overlay: React.CSSProperties = {
-  display: 'flex',
-  position: 'fixed',
-  inset: 0,
-  backgroundColor: 'rgba(0,0,0,0.7)',
-  zIndex: 1000,
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: '16px',
-}
-
-const panel: React.CSSProperties = {
-  backgroundColor: '#fff',
-  padding: '28px',
-  borderRadius: '10px',
-  width: '100%',
-  maxWidth: '640px',
-  maxHeight: '90vh',
-  overflowY: 'auto',
 }
 
 const headerRow: React.CSSProperties = {

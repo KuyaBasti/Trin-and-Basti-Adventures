@@ -54,28 +54,20 @@ export default function AdventuresPage() {
 
   return (
     <div
-      style={{
-        fontFamily: "'Helvetica Neue', Arial, sans-serif",
-        margin: 0,
-        padding: 0,
-        color: '#333',
-        backgroundColor: '#f9f9f9',
-        minHeight: '100vh',
-      }}
+      className="m-0 min-h-screen bg-[#f9f9f9] p-0 text-[#333]"
+      style={{ fontFamily: "'Helvetica Neue', Arial, sans-serif" }}
     >
       <Header />
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 15px' }}>
+      <div className="mx-auto box-content max-w-[1200px] px-[15px]">
         {featured && <FeaturedMemory memory={featured} onOpen={setViewing} />}
 
         {memories === null && !loadError && (
-          <p style={{ padding: '60px 0', textAlign: 'center', color: '#999' }}>
-            Loading our memories…
-          </p>
+          <p className="py-[60px] text-center text-[#999]">Loading our memories…</p>
         )}
 
         {loadError && (
-          <p style={{ padding: '60px 0', textAlign: 'center', color: '#c0392b' }}>
+          <p className="py-[60px] text-center text-[#c0392b]">
             Could not load the album. Try refreshing?
           </p>
         )}
@@ -96,29 +88,13 @@ export default function AdventuresPage() {
       {/* Hidden until the album has loaded: importing against unknown album
           state would skip merge detection and create duplicate days. */}
       {memories !== null && (
-      <button
-        onClick={() => setImportOpen(true)}
-        aria-label="Add memories"
-        style={{
-          position: 'fixed',
-          bottom: '30px',
-          right: '30px',
-          width: '60px',
-          height: '60px',
-          backgroundColor: '#333',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '50%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '30px',
-          boxShadow: '0 3px 10px rgba(0,0,0,0.2)',
-          cursor: 'pointer',
-        }}
-      >
-        +
-      </button>
+        <button
+          onClick={() => setImportOpen(true)}
+          aria-label="Add memories"
+          className="fixed bottom-5 right-5 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full border-none bg-[#333] text-[28px] text-white shadow-[0_3px_10px_rgba(0,0,0,0.2)] sm:bottom-[30px] sm:right-[30px] sm:h-[60px] sm:w-[60px] sm:text-[30px]"
+        >
+          +
+        </button>
       )}
 
       <ImportModal

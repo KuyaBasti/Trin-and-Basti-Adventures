@@ -25,15 +25,7 @@ export default function PhotoGrid({
   return (
     <>
       {shown.length > 1 && (
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '10px',
-            justifyContent: 'center',
-            paddingTop: '10px',
-          }}
-        >
+        <div className="flex flex-wrap justify-center gap-2 pt-2.5 sm:gap-2.5">
           {tabs.map((tab) => {
             const active = activeCategory === tab.value
             return (
@@ -41,16 +33,11 @@ export default function PhotoGrid({
                 key={tab.value}
                 onClick={() => setActiveCategory(tab.value)}
                 aria-pressed={active}
-                style={{
-                  padding: '8px 18px',
-                  borderRadius: '999px',
-                  border: `1px solid ${active ? '#333' : '#ddd'}`,
-                  backgroundColor: active ? '#333' : '#fff',
-                  color: active ? '#fff' : '#666',
-                  fontSize: '14px',
-                  fontFamily: 'inherit',
-                  cursor: 'pointer',
-                }}
+                className={`cursor-pointer rounded-full border px-4 py-2 font-[inherit] text-[13px] sm:px-[18px] sm:text-[14px] ${
+                  active
+                    ? 'border-[#333] bg-[#333] text-white'
+                    : 'border-[#ddd] bg-white text-[#666]'
+                }`}
               >
                 {tab.label}
               </button>
@@ -59,14 +46,7 @@ export default function PhotoGrid({
         </div>
       )}
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-          gap: '30px',
-          padding: '30px 0 40px',
-        }}
-      >
+      <div className="grid grid-cols-1 gap-5 py-6 sm:grid-cols-[repeat(auto-fill,minmax(300px,1fr))] sm:gap-[30px] sm:pb-10 sm:pt-[30px]">
         {memories.map((memory) => (
           <PhotoCard key={memory.id} memory={memory} onOpen={onOpen} />
         ))}

@@ -14,27 +14,11 @@ export default function PhotoCard({ memory, onOpen }: PhotoCardProps) {
   const extra = memory.photos.length - 1
 
   return (
-    <div
-      style={{
-        backgroundColor: '#fff',
-        borderRadius: '8px',
-        overflow: 'hidden',
-        boxShadow: '0 3px 10px rgba(0,0,0,0.1)',
-      }}
-    >
+    <div className="overflow-hidden rounded-lg bg-white shadow-[0_3px_10px_rgba(0,0,0,0.1)]">
       <button
         onClick={() => onOpen(memory)}
         aria-label={`Open ${memory.title}${extra > 0 ? `, ${memory.photos.length} photos` : ''}`}
-        style={{
-          display: 'block',
-          position: 'relative',
-          width: '100%',
-          height: '300px',
-          padding: 0,
-          border: 'none',
-          background: '#eee',
-          cursor: 'pointer',
-        }}
+        className="relative block h-[240px] w-full cursor-pointer border-none bg-[#eee] p-0 sm:h-[300px]"
       >
         {cover && (
           <Image
@@ -42,29 +26,18 @@ export default function PhotoCard({ memory, onOpen }: PhotoCardProps) {
             alt={memory.title}
             fill
             sizes="(max-width: 700px) 100vw, 400px"
-            style={{ objectFit: 'cover' }}
+            className="object-cover"
           />
         )}
         {extra > 0 && (
-          <span
-            style={{
-              position: 'absolute',
-              right: '10px',
-              bottom: '10px',
-              background: 'rgba(0,0,0,0.6)',
-              color: '#fff',
-              fontSize: '13px',
-              padding: '4px 10px',
-              borderRadius: '999px',
-            }}
-          >
+          <span className="absolute bottom-2.5 right-2.5 rounded-full bg-black/60 px-2.5 py-1 text-[13px] text-white">
             +{extra} more
           </span>
         )}
       </button>
 
-      <div style={{ padding: '20px' }}>
-        <h3 style={{ fontSize: '20px', margin: '0 0 10px 0', color: '#333' }}>
+      <div className="p-4 sm:p-5">
+        <h3 className="mb-2.5 mt-0 text-[18px] text-[#333] sm:text-[20px]">
           {memory.title}
         </h3>
 
@@ -72,25 +45,14 @@ export default function PhotoCard({ memory, onOpen }: PhotoCardProps) {
           href={mapsUrl(memory)}
           target="_blank"
           rel="noopener noreferrer"
-          style={{
-            fontSize: '14px',
-            color: '#888',
-            marginBottom: '8px',
-            fontStyle: 'italic',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-            textDecoration: 'none',
-          }}
+          className="mb-2 flex items-center gap-1 text-[14px] italic text-[#888] no-underline"
         >
           📍 {memory.location}
         </a>
 
-        <p style={{ fontSize: '14px', color: '#777', marginBottom: '15px' }}>{memory.date}</p>
+        <p className="mb-3 text-[14px] text-[#777] sm:mb-[15px]">{memory.date}</p>
 
-        <p style={{ fontSize: '16px', lineHeight: '1.5', color: '#555' }}>
-          {memory.description}
-        </p>
+        <p className="text-[16px] leading-normal text-[#555]">{memory.description}</p>
       </div>
     </div>
   )
