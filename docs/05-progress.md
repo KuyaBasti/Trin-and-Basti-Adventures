@@ -3,6 +3,33 @@
 Living record of what's shipped. Newest first — one dated entry per commit or
 coherent chunk of work. Keep it honest: unverified is unverified.
 
+## 2026-08-13 — Stage 5 complete: mobile pass on real Tailwind v4 (PR #9)
+
+The album now fits Trinity's phone: 375px gets a 30px title, one-column
+grid, and zero horizontal scroll across page/modal/lightbox; 768px is
+two-column; desktop ≥1024px is pixel-identical to production (48px title,
+500px hero, 1200px content column). All eight components migrated from
+inline styles to responsive classes.
+
+**Discovery:** Tailwind never worked in this repo. The v4 postcss plugin
+silently drops v3's `@tailwind` directives, so since July the site rendered
+under browser UA defaults — no preflight, no utilities. Enabling real
+Tailwind therefore changed global defaults invisibly: headings lost their
+UA bold, line-height grew from `normal` to 1.5, box-sizing flipped to
+border-box. A 16-agent style-parity review confirmed **14 divergences**
+(0 refuted), all fixed: a documented parity layer in `globals.css`
+restores heading weight / UA line-height / button + placeholder defaults;
+containers use `box-content` + 15px gutters for the exact 1200px content
+width; an accidental subtitle cap, hover lift, and 92vh modal height were
+reverted; lightbox edit inputs are 16px below `lg` so iOS Safari doesn't
+zoom on focus. One deliberate divergence, documented in the CSS: the old
+8px UA body margin (an accidental white frame) stays removed.
+
+Dead weight dropped: tailwindcss v3, autoprefixer, framer-motion.
+Lesson: verifying *sizes* isn't verifying *parity* — weight, line boxes,
+and box-sizing all drifted invisibly until reviewers diffed the removed
+inline styles property by property.
+
 ## 2026-08-13 — Stage 4 complete: edit, remove photo, delete memory (PR #7)
 
 The last management gap: typos and mistakes are now fixable on the site
