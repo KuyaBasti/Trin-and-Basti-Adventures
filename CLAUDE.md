@@ -56,11 +56,14 @@ of truth.
 ## Workflow
 
 - Feature branch → PR → merge, same as the other projects.
-- **Every commit that changes behavior gets a dated entry in
+- **Docs ship in their own PR, separate from code, merged after it.** Every
+  major merge is therefore two PRs: the code PR, then a docs PR carrying the
+  docs pass for it. Trivial fixes may fold docs in, but the default is two.
+- **Every merge that changes behavior gets a dated entry in
   `docs/05-progress.md`** — what shipped, what was decided, what was learned.
 - When structure changes (new component, route, storage shape, dependency),
   update `SYSTEM-DESIGN.md` (inventory, flowchart, decisions) and `README.md`
-  (status, repo map) in the same sitting.
+  (status, repo map) in the same docs PR.
 - End of every session: run the docs pass in `docs/README.md` so the docs match
   reality, and be explicit about gaps.
 

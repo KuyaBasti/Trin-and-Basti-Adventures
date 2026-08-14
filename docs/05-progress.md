@@ -3,6 +3,14 @@
 Living record of what's shipped. Newest first — one dated entry per commit or
 coherent chunk of work. Keep it honest: unverified is unverified.
 
+## 2026-08-13 — workflow decision: docs ship as their own PR
+
+Adopted the FinancialTracker convention verbatim: every major change is two
+PRs — the code PR, then a docs PR carrying the docs pass for it. Recorded in
+`CLAUDE.md` (Workflow), `docs/README.md` (docs pass), and the post-commit
+reminder hook in `.claude/settings.json`. Trivial fixes may fold docs in;
+two is the default.
+
 ## 2026-08-13 — merge-on-import + cover picker (Stage 4 begins)
 
 Basti's ask: clicking a memory should reveal the *other* photos from that
