@@ -1,3 +1,44 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities; 
+@import 'tailwindcss';
+
+/*
+ * Parity layer. Until 2026-08 the Tailwind pipeline silently generated
+ * nothing, so the site's settled look was rendered under browser UA defaults
+ * — no preflight. Real Tailwind v4 changes those defaults globally; the rules
+ * below pin the ones the design actually depends on.
+ *
+ * Deliberate exception: preflight's body { margin: 0 } is kept. The old 8px
+ * UA body margin drew an accidental white frame around the grey page — an
+ * unstyled-page artifact, not a design choice.
+ */
+
+/* Unlayered on purpose: beats preflight's `html { line-height: 1.5 }` so
+   text that sets no explicit leading keeps its original tighter line boxes. */
+html {
+  line-height: normal;
+}
+
+@layer base {
+  /* Preflight makes headings inherit weight; the site's headings have always
+     rendered at the UA bold. */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 700;
+  }
+
+  /* Preflight makes buttons inherit font and color; the site's buttons have
+     always rendered with UA button defaults unless styled explicitly. */
+  button {
+    font: revert;
+    color: revert;
+  }
+
+  /* Preflight dims placeholders via color-mix; keep the UA grey. */
+  ::placeholder {
+    color: revert;
+    opacity: revert;
+  }
+}

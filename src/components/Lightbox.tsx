@@ -152,16 +152,7 @@ export default function Lightbox({ memory, onClose, onUpdated, onDeleted }: Ligh
         touchStartX.current = null
       }}
     >
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '14px 18px',
-          color: '#fff',
-          gap: '12px',
-        }}
-      >
+      <div className="flex items-center justify-between gap-2 px-3 py-2.5 text-white sm:gap-3 sm:px-[18px] sm:py-3.5">
         <div style={{ minWidth: 0 }}>
           <div style={{ fontSize: '15px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
             {memory.title}
@@ -258,14 +249,7 @@ export default function Lightbox({ memory, onClose, onUpdated, onDeleted }: Ligh
       </div>
 
       <div
-        style={{
-          flex: 1,
-          position: 'relative',
-          minHeight: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
+        className="relative flex min-h-0 flex-1 items-center justify-center"
         onClick={(e) => e.stopPropagation()}
       >
         <Image
@@ -326,7 +310,7 @@ export default function Lightbox({ memory, onClose, onUpdated, onDeleted }: Ligh
 
       {count > 1 && !editing && (
         <div
-          style={{ display: 'flex', gap: '8px', overflowX: 'auto', padding: '12px 18px' }}
+          className="flex gap-2 overflow-x-auto px-3 py-2.5 sm:px-[18px] sm:py-3"
           onClick={(e) => e.stopPropagation()}
         >
           {memory.photos.map((p, i) => (
@@ -448,19 +432,7 @@ function EditPanel({
       }}
       onClick={(e) => e.stopPropagation()}
     >
-      <div
-        style={{
-          background: '#1c1c1c',
-          border: '1px solid #333',
-          borderRadius: '10px',
-          padding: '22px',
-          width: '100%',
-          maxWidth: '480px',
-          maxHeight: '100%',
-          overflowY: 'auto',
-          color: '#eee',
-        }}
-      >
+      <div className="max-h-full w-full max-w-[480px] overflow-y-auto rounded-[10px] border border-[#333] bg-[#1c1c1c] p-4 text-[#eee] sm:p-[22px]">
         <h3 style={{ margin: '0 0 16px', fontSize: '18px' }}>Edit this memory</h3>
 
         <label style={editLabel}>Title</label>
@@ -469,6 +441,7 @@ function EditPanel({
           value={fields.title}
           onChange={(e) => setFields({ ...fields, title: e.target.value })}
           style={editInput}
+          className={editInputClass}
         />
         <label style={editLabel}>Location</label>
         <input
@@ -476,6 +449,7 @@ function EditPanel({
           value={fields.location}
           onChange={(e) => setFields({ ...fields, location: e.target.value })}
           style={editInput}
+          className={editInputClass}
         />
         <label style={editLabel}>Date</label>
         <input
@@ -483,12 +457,14 @@ function EditPanel({
           value={fields.takenAt}
           onChange={(e) => setFields({ ...fields, takenAt: e.target.value })}
           style={editInput}
+          className={editInputClass}
         />
         <label style={editLabel}>Category</label>
         <select
           value={fields.category}
           onChange={(e) => setFields({ ...fields, category: e.target.value as PhotoCategory })}
           style={editInput}
+          className={editInputClass}
         >
           {CATEGORIES.map((c) => (
             <option key={c.value} value={c.value}>
@@ -502,6 +478,7 @@ function EditPanel({
           onChange={(e) => setFields({ ...fields, description: e.target.value })}
           rows={4}
           style={{ ...editInput, resize: 'vertical' }}
+          className={editInputClass}
         />
 
         {error && (
@@ -593,6 +570,10 @@ const editLabel: React.CSSProperties = {
   margin: '10px 0 4px',
 }
 
+/**
+ * Font size lives in `editInputClass` (16px under lg — iOS Safari zooms the
+ * page on focusing any input below 16px; 15px at desktop, the original).
+ */
 const editInput: React.CSSProperties = {
   width: '100%',
   padding: '9px 10px',
@@ -600,10 +581,11 @@ const editInput: React.CSSProperties = {
   border: '1px solid #444',
   background: '#111',
   color: '#eee',
-  fontSize: '15px',
   fontFamily: 'inherit',
   boxSizing: 'border-box',
 }
+
+const editInputClass = 'text-[16px] lg:text-[15px]'
 
 const panelButton = (bg: string, color: string): React.CSSProperties => ({
   background: bg,
