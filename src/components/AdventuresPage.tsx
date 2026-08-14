@@ -132,6 +132,10 @@ export default function AdventuresPage() {
         memory={viewing}
         onClose={() => setViewing(null)}
         onUpdated={(m) => handleChanged([m])}
+        onDeleted={(id) => {
+          setMemories((prev) => (prev ?? []).filter((m) => m.id !== id))
+          setViewing((v) => (v?.id === id ? null : v))
+        }}
       />
     </div>
   )

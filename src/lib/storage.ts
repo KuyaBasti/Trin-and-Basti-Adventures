@@ -9,6 +9,12 @@ export interface StorageDriver {
   writeManifest(memories: Memory[]): Promise<void>
   /** Stores the image bytes and returns a URL usable in <Image src>. */
   saveImage(filename: string, bytes: Buffer, contentType: string): Promise<string>
+  /**
+   * Removes a stored image by the URL `saveImage` returned. Only touches this
+   * app's own uploads — seed assets in `public/` are never candidates. Callers
+   * treat failures as acceptable (an orphaned image beats a blocked delete).
+   */
+  deleteImage(src: string): Promise<void>
 }
 
 /**
@@ -61,6 +67,15 @@ function localDriver(): StorageDriver {
       await fs.writeFile(path.join(dir, filename), bytes)
       return `/uploads/${filename}`
     },
+
+    async deleteImage(src) {
+      if (!src.startsWith('/uploads/')) return
+      const { fs, path } = await node()
+      // basename() forecloses traversal — the deletable set is exactly the
+      // flat files inside public/uploads/.
+      const file = path.basename(src)
+      await fs.unlink(path.join(process.cwd(), 'public', 'uploads', file))
+    },
   }
 }
 
@@ -102,6 +117,13 @@ function blobDriver(): StorageDriver {
         addRandomSuffix: true,
       })
       return url
+    },
+
+    async deleteImage(src) {
+      // Guard even here: only URLs in this app's own store are deletable.
+      if (!isOwnSrc(src)) return
+      const { del } = await import('@vercel/blob')
+      await del(src)
     },
   }
 }
@@ -151,6 +173,12 @@ export function isOwnSrc(src: string): boolean {
     // Token shape: vercel_blob_rw_<STOREID>_<secret> → store hostname is
     // <storeid>.public.blob.vercel-storage.com. If the shape ever changes,
     // fall back to the suffix check rather than locking ourselves out.
+    // The pathname prefix is load-bearing: the manifest (memories.json) lives
+    // on the same store host, so a hostname-only check would let a crafted
+    // photo src target it — and deleting that "photo" would destroy the whole
+    // album. saveImage always writes under /memories/, so requiring that
+    // prefix has no false positives.
+    if (!url.pathname.startsWith('/memories/')) return false
     const match = token.match(/^vercel_blob_rw_([A-Za-z0-9]+)_/)
     if (match) {
       return url.hostname === `${match[1].toLowerCase()}.public.blob.vercel-storage.com`
