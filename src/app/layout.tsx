@@ -10,8 +10,20 @@ const playfairDisplay = Playfair_Display({
 })
 
 export const metadata: Metadata = {
+  // Absolute base for og:image / twitter:image URLs in link previews.
+  metadataBase: new URL('https://anniversary-one-taupe.vercel.app'),
   title: "Trin and Basti Adventures",
-  description: "Trin and Basti Adventures",
+  description:
+    'Our photo album — every adventure Trin and Basti have shared, one memory at a time.',
+  openGraph: {
+    title: 'Trin and Basti Adventures',
+    description:
+      'Our photo album — every adventure Trin and Basti have shared, one memory at a time.',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+  },
 };
 
 export default function RootLayout({
