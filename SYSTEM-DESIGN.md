@@ -254,4 +254,4 @@ Detail and exit criteria live in
 | 3 | Ship — Blob store + env vars, deploy, real import verified live | ✅ done 2026-08-13 |
 | 4 | Manage — edit/delete memories | ✅ done 2026-08-13 |
 | 5 | Mobile layout pass — Tailwind v4, responsive, desktop pixel parity | ✅ done 2026-08-13 |
-| 6 | Polish — compress seed PNGs, favicon, OG link preview | ⬜ **next** |
+| 6 | Polish — compress seed PNGs, favicon, OG link preview | ✅ done 2026-08-14 — roadmap complete |

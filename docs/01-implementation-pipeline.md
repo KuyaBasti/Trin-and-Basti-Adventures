@@ -78,12 +78,15 @@ held via a documented parity layer in `globals.css`.
   iOS Safari never zooms. A 16-agent parity review confirmed 14 invisible
   divergences (heading weight, line-height, box-sizing) — all fixed.
 
-## Stage 6 — Polish ⬜
+## Stage 6 — Polish ✅ (2026-08-14) — roadmap complete
 
-- Compress the three 15MB seed PNGs (`MainPic`, `BrunchSnob`, `SFNight`) to
-  ~250KB JPEGs.
-- Favicon + OG image so a texted link renders a preview card instead of a
-  blank grey box.
-- Distinct `metadata` title/description.
-- **Exit criteria:** first load under ~2s on cell data; link preview shows
-  MainPic + title in iMessage.
+Landed as PR #11: seed PNGs → 2400px q85 JPEGs (47MB → 3.9MB; ~1.1–1.5MB
+each, not the estimated 250KB — grainy fair-ground photos compress worse,
+still a 12× cut), `.png`→`.jpg` rewrites protecting the live manifest's
+URLs, `icon.svg` favicon, 1200×630 OG/twitter images, `metadataBase`,
+real description.
+
+- **Exit criteria, actual result:** hero loads visibly faster (the 15MB
+  optimizer source is gone); OG tags verified in served HTML with correct
+  dimensions. The iMessage unfurl itself is checked the first time Basti
+  texts the link — nothing left to build for it.

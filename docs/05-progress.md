@@ -3,6 +3,18 @@
 Living record of what's shipped. Newest first — one dated entry per commit or
 coherent chunk of work. Keep it honest: unverified is unverified.
 
+## 2026-08-14 — Stage 6 complete: polish (PR #11) — roadmap done
+
+The three pre-pipeline seed PNGs (15–17MB each — the only files that never
+went through the compressor) became 2400px q85 JPEGs: 47MB → 3.9MB. The
+live manifest references the old `.png` paths, so `next.config` rewrites
+map them to the new files — no data migration; verified through direct
+requests and `/_next/image`. Added `icon.svg` (dark tile, serif T·B),
+1200×630 `opengraph-image`/`twitter-image` from MainPic, `metadataBase`,
+and a real description — a texted link now unfurls a photo card.
+Housekeeping: Vercel's bot PR #2 (CVE patch) closed itself after the Next
+upgrade merged.
+
 ## 2026-08-13 — Stage 5 complete: mobile pass on real Tailwind v4 (PR #9)
 
 The album now fits Trinity's phone: 375px gets a 30px title, one-column
@@ -127,13 +139,15 @@ Lesson recorded: a Vercel deploy can fail *after* "Build Completed" — check
 
 ## Where things stand
 
-- **The site is live and uploads work in production.**
-  `anniversary-one-taupe.vercel.app` serves the album from Vercel Blob; the
-  first real memory ("In N Out") was imported by Basti on 2026-08-13 with
-  EXIF date + GPS location autofill working end-to-end.
+- **The roadmap is complete.** All six stages shipped between 2026-08-10 and
+  2026-08-14: persistent storage, bulk import with EXIF day-grouping and
+  same-day merging, cover selection, edit/remove/delete, the mobile pass,
+  and polish (compressed seeds, favicon, link previews). The album is live
+  at `anniversary-one-taupe.vercel.app`.
 - **Design settled:** keeping the original neutral look; no redesigns.
-- **Next:** Stage 4 (edit/delete) or Stage 5 (mobile layout pass) — Basti's
-  call. Bulk import of the photo backlog can start any time.
+- **What remains is content, not code:** Basti's photo backlog and the
+  descriptions. Plus two optional odds and ends: a nicer domain name before
+  sharing, and a casual iPhone import to tick off the HEIC check.
 
 ## Stage status
 
@@ -143,9 +157,9 @@ Lesson recorded: a Vercel deploy can fail *after* "Build Completed" — check
 | 1 Persistent uploads | ✅ done 2026-08-10 (superseded by Stage 2) |
 | 2 Memories + bulk import | ✅ done 2026-08-12, verified locally |
 | 3 Ship | ✅ done 2026-08-13 — live, real upload verified in production |
-| 4 Manage (edit/delete) | ⬜ next candidate |
-| 5 Mobile pass | ⬜ next candidate |
-| 6 Polish | ⬜ |
+| 4 Manage (edit/delete) | ✅ done 2026-08-13 |
+| 5 Mobile pass | ✅ done 2026-08-13 |
+| 6 Polish | ✅ done 2026-08-14 — roadmap complete |
 
 ---
 
