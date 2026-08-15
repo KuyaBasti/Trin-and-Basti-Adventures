@@ -126,7 +126,7 @@ The authoritative log lives in [docs/05-progress.md](docs/05-progress.md).
 | 3 · Ship | ✅ | Live at `anniversary-one-taupe.vercel.app`; real import verified in production |
 | 4 · Manage | ✅ | Edit, remove-photo, delete — from the site, review-hardened |
 | 5 · Mobile pass | ✅ | Tailwind v4, responsive at 375/768/1024+, desktop pixel-identical |
-| 6 · Polish | ⬜ | **next** — compress the 15MB seed PNGs, favicon, OG link preview |
+| 6 · Polish | ✅ | Seeds 47MB → 3.9MB, favicon, link-preview card — **roadmap complete** |
 
 ## Quickstart
 
