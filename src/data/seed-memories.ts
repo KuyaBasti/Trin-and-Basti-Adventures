@@ -33,7 +33,7 @@ export const SEED_MEMORIES: Memory[] = [
       I threw up, you ruined your shirt.
       But all in all we enjoyed our time together and we had a good night after that.`,
     category: 'special-days',
-    ...one('featured', '/MainPic.png', '2024-07-21'),
+    ...one('featured', '/MainPic.jpg', '2024-07-21'),
   },
   {
     id: 'papago',
@@ -78,7 +78,7 @@ export const SEED_MEMORIES: Memory[] = [
       We always wanted to eat Onion Rings and we finally we were finally able to.
       It was our last day together before I go back home :(`,
     category: 'special-days',
-    ...one('brunch-snob', '/BrunchSnob.png', '2025-01-12'),
+    ...one('brunch-snob', '/BrunchSnob.jpg', '2025-01-12'),
   },
   {
     id: 'chinese-new-year',
@@ -89,7 +89,7 @@ export const SEED_MEMORIES: Memory[] = [
       Although we were not able to go to Chinatown,
       we were able to enjoy each other's company and have a good time.`,
     category: 'special-days',
-    ...one('chinese-new-year', '/SFNight.png', '2025-02-15'),
+    ...one('chinese-new-year', '/SFNight.jpg', '2025-02-15'),
   },
   {
     id: 'palace-fine-arts',
