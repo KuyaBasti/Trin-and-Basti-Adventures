@@ -3,6 +3,26 @@
 Living record of what's shipped. Newest first — one dated entry per commit or
 coherent chunk of work. Keep it honest: unverified is unverified.
 
+## 2026-08-14 — the reveal 🎉, and the timer becomes the centerpiece (PR #13)
+
+**Trinity has the link and she loves it.** The gift is delivered.
+
+Post-reveal, Basti's first explicit design ask: make the together-timer
+stand out. It went from a 13px grey italic sentence to a stat row —
+Playfair numerals over small-caps labels, "together for" kicker, "and
+counting 💕" caption. Palette untouched; prominence through typography,
+per the guardrail's explicit-ask clause. Built with the newly installed
+`emil-design-eng` skill guiding the polish: no per-tick animation (seen
+86k times/day), one-time opacity-led entrance (which also fixed the
+long-standing SSR "0 days" flash), tabular figures + reserved width so
+ticking never shifts neighbours (verified), aria-label sentence with
+aria-hidden ticking blocks.
+
+Also this session: `frontend-design` and `emil-design-eng` skills
+installed user-globally from skills.sh. Decision recorded: they are for
+*other* projects' UI work; the album's neutral design stays guarded, and
+scoped element upgrades happen only on explicit ask — like this one.
+
 ## 2026-08-14 — Stage 6 complete: polish (PR #11) — roadmap done
 
 The three pre-pipeline seed PNGs (15–17MB each — the only files that never
@@ -145,9 +165,9 @@ Lesson recorded: a Vercel deploy can fail *after* "Build Completed" — check
   and polish (compressed seeds, favicon, link previews). The album is live
   at `anniversary-one-taupe.vercel.app`.
 - **Design settled:** keeping the original neutral look; no redesigns.
-- **What remains is content, not code:** Basti's photo backlog and the
-  descriptions. Plus two optional odds and ends: a nicer domain name before
-  sharing, and a casual iPhone import to tick off the HEIC check.
+- **Delivered: Trinity has seen it and loves it** (2026-08-14). What remains
+  is Basti's photo backlog and descriptions, plus odds and ends: an optional
+  domain rename, and a casual iPhone import to tick off the HEIC check.
 
 ## Stage status
 
