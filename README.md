@@ -48,9 +48,9 @@ of us add memories from any device.
   (longest edge 2400px, JPEG). A 16MB phone photo becomes roughly 750KB, which
   keeps everything inside free tiers.
 - **Browse** — a chronological album of memory cards under a live
-  together-timer. Category filters appear only for categories that have
-  memories. Every location is a Google Maps link, using exact EXIF coordinates
-  when the photo carried them.
+  together-timer, told oldest-first like the year it records. Every location
+  is a Google Maps link, using exact EXIF coordinates when the photo carried
+  them.
 - **Relive** — tapping a memory opens a gallery of all its photos: arrow keys
   on desktop, swipe on a phone.
 
