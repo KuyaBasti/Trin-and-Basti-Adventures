@@ -3,6 +3,21 @@
 Living record of what's shipped. Newest first — one dated entry per commit or
 coherent chunk of work. Keep it honest: unverified is unverified.
 
+## 2026-08-19 — category filtering removed (PR #15)
+
+Basti's call after living with the album: chips for two categories on a
+two-person site were UI without a problem. Removed the grid chips and both
+now-pointless Category dropdowns (import drafts and the edit panel — one
+less question per imported day). The `category` field survives in stored
+data, unused; the API still accepts and defaults it, so the removal is
+UI-only and reversible. Verified in the browser: no chips, album renders,
+both forms reduced to title/location/date/description.
+
+Ops lesson, now twice-earned: **never run `npm run build` while a dev
+server is up** — they share `.next/` and the build corrupts the running
+server (manifests as `Cannot find module './NNN.js'` + 500s). Recorded in
+CLAUDE.md's Verification section.
+
 ## 2026-08-14 — the reveal 🎉, and the timer becomes the centerpiece (PR #13)
 
 **Trinity has the link and she loves it.** The gift is delivered.

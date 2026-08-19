@@ -70,7 +70,10 @@ of truth.
 ## Verification
 
 - `npx tsc --noEmit` — typecheck (no test suite yet)
-- `npm run build` — production build must stay clean
+- `npm run build` — production build must stay clean. **Stop any running dev
+  server first** — build and dev share `.next/`, and building underneath a
+  live server corrupts it (`Cannot find module './NNN.js'`, 500s; fix is
+  stop → `rm -rf .next` → restart).
 - Browser-verify upload/import changes end-to-end via the dev server
   (`.claude/launch.json`, auto-port). Local storage writes to `.data/` and
   `public/uploads/` (both git-ignored).

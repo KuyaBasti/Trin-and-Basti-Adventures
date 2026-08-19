@@ -41,7 +41,7 @@ flowchart TD
         import["ImportModal<br/>multi-select → EXIF read → day groups →<br/>one draft card per day"]:::web
         exif["client-image.ts<br/>exifr date+GPS · canvas compress<br/>2400px · JPEG q0.82"]:::web
         geo["reverseGeocode<br/>Nominatim, 1 req/s, best-effort"]:::web
-        page["AdventuresPage<br/>fetch album · category filters"]:::web
+        page["AdventuresPage<br/>fetch album · chronological grid"]:::web
         light["Lightbox<br/>keyboard + swipe gallery"]:::web
     end
 
@@ -185,9 +185,10 @@ password. Reads are public; only writes are gated.
 ### 4. Album view
 
 `AdventuresPage` fetches `/api/memories` once, pins the `featured` memory to
-the hero slot, sorts the rest oldest-first (the album reads as a story), and
-filters by category — filter chips render only for categories that actually
-contain memories. `Lightbox` handles arrows/Escape on desktop and swipe on
+the hero slot, and sorts the rest oldest-first (the album reads as a story).
+Category filtering was removed 2026-08-14 (Basti's call — two categories on a
+two-person album was UI without a problem); the `category` field survives in
+stored data, unused. `Lightbox` handles arrows/Escape on desktop and swipe on
 mobile, locks page scroll while open, and thumbnails the current memory's
 photos.
 
@@ -197,7 +198,7 @@ photos.
 
 | Component | Layer | Tech | Status | Where |
 |---|---|---|---|---|
-| Album page + category filters | Web | React client | ✅ built | `src/components/AdventuresPage.tsx`, `PhotoGrid.tsx` |
+| Album page + chronological grid | Web | React client | ✅ built (category filters removed 2026-08-14) | `src/components/AdventuresPage.tsx`, `PhotoGrid.tsx` |
 | Memory cards + featured hero | Web | React · next/image | ✅ built | `src/components/PhotoCard.tsx`, `FeaturedMemory.tsx` |
 | Lightbox gallery (keys + swipe) | Web | React | ✅ built | `src/components/Lightbox.tsx` |
 | Relationship timer | Web | React | ✅ built | `src/components/Header.tsx` |
