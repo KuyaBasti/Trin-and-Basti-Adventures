@@ -14,7 +14,6 @@ export type { Memory } from '@/lib/photos'
 
 export default function AdventuresPage() {
   const [memories, setMemories] = useState<Memory[] | null>(null)
-  const [activeCategory, setActiveCategory] = useState('all')
   const [isImportOpen, setImportOpen] = useState(false)
   const [viewing, setViewing] = useState<Memory | null>(null)
   const [loadError, setLoadError] = useState(false)
@@ -47,10 +46,6 @@ export default function AdventuresPage() {
 
   const featured = memories?.find((m) => m.id === FEATURED_ID)
   const rest = memories?.filter((m) => m.id !== FEATURED_ID) ?? []
-  const filtered =
-    activeCategory === 'all'
-      ? rest
-      : rest.filter((memory) => memory.category === activeCategory)
 
   return (
     <div
@@ -72,15 +67,7 @@ export default function AdventuresPage() {
           </p>
         )}
 
-        {memories !== null && (
-          <PhotoGrid
-            memories={filtered}
-            activeCategory={activeCategory}
-            setActiveCategory={setActiveCategory}
-            availableCategories={rest.map((m) => m.category)}
-            onOpen={setViewing}
-          />
-        )}
+        {memories !== null && <PhotoGrid memories={rest} onOpen={setViewing} />}
       </div>
 
       <Footer />

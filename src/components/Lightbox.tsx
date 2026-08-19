@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import { CATEGORIES, coverOf, type Memory, type PhotoCategory } from '@/lib/photos'
+import { coverOf, type Memory } from '@/lib/photos'
 
 interface LightboxProps {
   memory: Memory | null
@@ -367,7 +367,6 @@ interface EditFields {
   location: string
   takenAt: string
   description: string
-  category: PhotoCategory
 }
 
 function EditPanel({
@@ -386,7 +385,6 @@ function EditPanel({
     location: memory.location,
     takenAt: memory.takenAt,
     description: memory.description,
-    category: memory.category,
   })
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -459,19 +457,6 @@ function EditPanel({
           style={editInput}
           className={editInputClass}
         />
-        <label style={editLabel}>Category</label>
-        <select
-          value={fields.category}
-          onChange={(e) => setFields({ ...fields, category: e.target.value as PhotoCategory })}
-          style={editInput}
-          className={editInputClass}
-        >
-          {CATEGORIES.map((c) => (
-            <option key={c.value} value={c.value}>
-              {c.label}
-            </option>
-          ))}
-        </select>
         <label style={editLabel}>Description</label>
         <textarea
           value={fields.description}

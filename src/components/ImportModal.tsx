@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { CATEGORIES, formatDate, type Memory, type PhotoCategory } from '@/lib/photos'
+import { formatDate, type Memory } from '@/lib/photos'
 import { compressImage, reverseGeocode } from '@/lib/client-image'
 import { buildDrafts, coordsOf, UNDATED, type Draft } from '@/lib/grouping'
 
@@ -469,22 +469,9 @@ function DraftCard({
             value={draft.description}
             onChange={(e) => onChange(draft.key, { description: e.target.value })}
             rows={3}
-            style={{ ...input, marginBottom: '8px', height: '84px', resize: 'vertical' }}
+            style={{ ...input, height: '84px', resize: 'vertical' }}
             placeholder="What made it special?"
           />
-          <select
-            value={draft.category}
-            onChange={(e) =>
-              onChange(draft.key, { category: e.target.value as PhotoCategory })
-            }
-            style={input}
-          >
-            {CATEGORIES.map((c) => (
-              <option key={c.value} value={c.value}>
-                {c.label}
-              </option>
-            ))}
-          </select>
         </>
       )}
     </div>

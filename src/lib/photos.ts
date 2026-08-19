@@ -31,12 +31,9 @@ export interface Memory {
   coverId?: string
 }
 
-export const CATEGORIES: { value: PhotoCategory; label: string }[] = [
-  { value: 'travels', label: 'Travels' },
-  { value: 'date-nights', label: 'Date Nights' },
-  { value: 'adventures', label: 'Adventures' },
-  { value: 'special-days', label: 'Special Days' },
-]
+// Category filtering was removed from the UI (2026-08-14, Basti's call — two
+// categories for a two-person album was UI without a problem). The `category`
+// field stays on stored memories, harmless, in case it's ever wanted again.
 
 export function coverOf(memory: Memory): Photo | undefined {
   return memory.photos.find((p) => p.id === memory.coverId) ?? memory.photos[0]
