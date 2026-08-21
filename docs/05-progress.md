@@ -18,6 +18,19 @@ server is up** — they share `.next/` and the build corrupts the running
 server (manifests as `Cannot find module './NNN.js'` + 500s). Recorded in
 CLAUDE.md's Verification section.
 
+## 2026-08-19 — the dream roadmap is specced (docs/06)
+
+Basti asked what the album becomes with unlimited time. Answer:
+[06-dream-roadmap.md](06-dream-roadmap.md) — Stages 7–19, each with exit
+criteria, in dependency order: test harness → on-this-day → story mode →
+the map → passkeys → margin notes → presence-lite → semantic search →
+PWA → auto-import inbox → originals archive → the annual book → event
+sourcing as the optional capstone. All additive, all inside the standing
+invariants (gift never breaks, neutral design, no third-party data
+processors, two people, free tier by default). **Unscheduled by design** —
+it exists so future energy has a map, not to create obligation. Tier-3
+mayhem (Kubernetes for a couple) is recorded as explicit non-goals.
+
 ## 2026-08-14 — the reveal 🎉, and the timer becomes the centerpiece (PR #13)
 
 **Trinity has the link and she loves it.** The gift is delivered.

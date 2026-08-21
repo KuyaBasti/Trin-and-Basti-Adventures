@@ -26,6 +26,7 @@ Read when working on that surface:
 | [`02-data-model.md`](02-data-model.md) | Memory/Photo types, the manifest, storage drivers, seeds |
 | [`03-import-spec.md`](03-import-spec.md) | import modal, EXIF, grouping, compression, geocoding |
 | [`04-deployment.md`](04-deployment.md) | Vercel config, env vars, Blob store, anything ops |
+| [`06-dream-roadmap.md`](06-dream-roadmap.md) | any future feature work — Stages 7–19 are specced there with exit criteria; check it before inventing a new direction |
 
 ## The ones that bite
 

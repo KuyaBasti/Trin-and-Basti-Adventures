@@ -154,6 +154,7 @@ Start with the system design; the rest are referenced as needed.
 | [docs/03 — Import spec](docs/03-import-spec.md) | EXIF, day-grouping, compression, geocoding, limits |
 | [docs/04 — Deployment](docs/04-deployment.md) | Vercel + Blob setup, env vars, local dev storage |
 | [docs/05 — Progress](docs/05-progress.md) | Living status log |
+| [docs/06 — Dream roadmap](docs/06-dream-roadmap.md) | Stages 7–19, specced and unscheduled: the map, story mode, margin notes, semantic search, the annual book |
 
 ---
 
