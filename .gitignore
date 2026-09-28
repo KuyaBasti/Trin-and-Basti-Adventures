@@ -81,3 +81,8 @@ jspm_packages/
 # Local upload storage (dev only; production uses Vercel Blob)
 .data/
 public/uploads/
+
+# Test artifacts (suite lives on the experiment line; keep main clean too)
+tests/fixtures/
+test-results/
+playwright-report/

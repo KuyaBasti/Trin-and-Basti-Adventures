@@ -3,6 +3,26 @@
 Living record of what's shipped. Newest first — one dated entry per commit or
 coherent chunk of work. Keep it honest: unverified is unverified.
 
+## 2026-09-28 — the rituals become agents and commands (PR #19)
+
+Basti, after studying career-ops's mode system: make the album multi-agent.
+Adopted the *principle* (named, launchable workflows) via Claude Code's
+native mechanisms — not the platform machinery (update system, plugin
+marketplace, nine-CLI config), which stays a non-goal for a two-person
+album. New: `.claude/agents/` (`album-reviewer` with the lens method that
+confirmed 37 pre-merge bugs plus the house facts it judges by;
+`album-verifier` with evidence-based checks; `docs-keeper` running the docs
+pass) and `.claude/commands/` (`/review`, `/ship`, `/docs-pass`, `/verify`).
+CLAUDE.md routes to them. Cleanup in this PR: stray Stage 7 test artifacts
+that leaked onto main via `git add -A` (their gitignore entries lived only
+on the experiment branch) are removed and ignored on main too.
+
+Meanwhile on the experiment line (private lab repo): Stage 7's Playwright
+harness is green locally (30 passed; both sabotage proofs caught), but its
+push is blocked — the GitHub token lacks the `workflow` scope needed to push
+CI files. Pending Basti running `gh auth refresh -h github.com -s workflow`,
+plus a small fixture type fix.
+
 ## 2026-08-19 — category filtering removed (PR #15)
 
 Basti's call after living with the album: chips for two categories on a
