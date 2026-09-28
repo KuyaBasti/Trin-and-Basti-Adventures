@@ -53,6 +53,21 @@ of truth.
 - No accounts, no multi-tenancy, no cloud beyond Vercel + Blob. Two users, one
   shared password.
 
+## Agents & commands
+
+The repo's working rituals are codified — prefer them over improvising:
+
+| Invoke | What it does |
+| --- | --- |
+| `/review` | Adversarial multi-agent review: 2–4 `album-reviewer` lenses in parallel, every finding refuted by a fresh agent before it counts. Run before shipping anything substantive |
+| `/ship` | The full ritual: verify → feature branch → code PR → merge → docs pass → docs PR → prod check |
+| `/docs-pass` | `docs-keeper` sweeps the docs to match reality, ships as a docs PR |
+| `/verify` | `album-verifier` proves the state: tsc, clean build, API guards, suite if present |
+
+Agent definitions live in `.claude/agents/` and carry the house facts
+(manifest semantics, `isOwnSrc`, idempotent retries, the parity layer) so
+spawned agents don't rediscover them.
+
 ## Workflow
 
 - Feature branch → PR → merge, same as the other projects.
